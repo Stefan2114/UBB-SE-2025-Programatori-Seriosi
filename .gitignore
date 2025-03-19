@@ -14,6 +14,19 @@ obj/
 .env
 secrets.json
 
+# Ignore auto-generated NuGet files
+.nuget/
+packages/
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Ignore WinUI-specific output
+AppPackages/
+BundleArtifacts/
+Project.lock.json
+*.cache/
+
 # Ignore node_modules and build output for React
 client/node_modules/
 client/build/
@@ -50,3 +63,18 @@ dotnet.lock.json
 .DS_Store  # macOS
 Thumbs.db  # Windows
 Desktop.ini  # Windows
+
+# Windows-specific files  
+*.manifest  # System-generated manifest files  
+*.cache 
+
+
+# Ignore database-specific files but keep queries
+*.bak  # SQL Server backup
+*.mdf  # SQL Server database file
+*.ldf  # SQL Server log file
+*.sqlite  # SQLite database file
+*.db  # Generic database file
+*.sql-journal  # SQLite journal file
+pgdata/  # PostgreSQL database data directory
+*.pgdump  # PostgreSQL database dump file
