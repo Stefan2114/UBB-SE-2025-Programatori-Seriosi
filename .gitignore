@@ -1,0 +1,52 @@
+# Ignore build output and dependencies for .NET
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.appx
+*.appxbundle
+*.msi
+*.nupkg
+*.snupkg
+*.vs
+.vscode/
+.env
+secrets.json
+
+# Ignore node_modules and build output for React
+client/node_modules/
+client/build/
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+
+# Ignore log files
+*.log
+logs/
+debug.log
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore IDE/editor specific files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Ignore coverage and test result files
+coverage/
+test-results/
+
+# Ignore package manager lock files
+client/package-lock.json
+dotnet.lock.json
+
+# OS-specific files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+Desktop.ini  # Windows
