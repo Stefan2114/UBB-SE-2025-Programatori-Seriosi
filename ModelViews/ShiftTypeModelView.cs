@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Team3.Domain;
+using Team3.Models;
+
+namespace Team3.ModelViews
+{
+    public class ShiftTypeModelView
+    {
+        private readonly ShiftTypeModel _shiftTypeModel;
+        public ObservableCollection<ShiftType> ShiftTypes { get; private set; }
+
+        public ShiftTypeModelView()
+        {
+            _shiftTypeModel = ShiftTypeModel.Instance;
+            ShiftTypes = new ObservableCollection<ShiftType>();
+            LoadShiftTypes();
+        }
+
+        private void LoadShiftTypes()
+        {
+            try
+            {
+                var shiftTypeList = _shiftTypeModel.GetShiftTypes();
+                if (shiftTypeList != null && shiftTypeList.Count > 0)
+                {
+                    foreach (var shiftType in shiftTypeList)
+                    {
+                        Debug.WriteLine(shiftType.ToString());
+                        ShiftTypes.Add(shiftType);
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("No shift types available.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading shift types: {ex.Message}");
+            }
+        }
+
+        public List<ShiftType> GetShiftTypesByTimeRange(DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                var shiftTypeList = _shiftTypeModel.GetShiftTypes();
+                var filteredShiftTypes = new List<ShiftType>();
+
+                foreach (var shiftType in shiftTypeList)
+                {
+                    if (shiftType.ShiftTypeStartTime >= startTime && shiftType.ShiftTypeEndTime <= endTime)
+                    {
+                        filteredShiftTypes.Add(shiftType);
+                        Debug.WriteLine(shiftType.ToString());
+                    }
+                }
+
+                if (filteredShiftTypes.Count == 0)
+                {
+                    Debug.WriteLine($"No shift types found in the time range {startTime} - {endTime}");
+                }
+
+                return filteredShiftTypes;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error filtering shift types: {ex.Message}");
+                throw;
+            }
+        }
+    }
+}
