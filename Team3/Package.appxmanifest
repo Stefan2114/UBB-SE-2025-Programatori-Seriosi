@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="04722b8c-e572-4d85-817a-85f907767d96"
-    Publisher="CN=stefa"
+    Name="039e5cb9-9427-4c71-9352-3c0844b01495"
+    Publisher="CN=schio"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="04722b8c-e572-4d85-817a-85f907767d96" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="039e5cb9-9427-4c71-9352-3c0844b01495" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Team3</DisplayName>
-    <PublisherDisplayName>stefa</PublisherDisplayName>
+    <PublisherDisplayName>schio</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
