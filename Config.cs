@@ -21,16 +21,13 @@ namespace Team3
         {
             get
             {
-                if (_instance == null)
-                {
 
-                    lock (_lock)
+                lock (_lock)
+                {
+                    if (_instance == null)
                     {
-                        if (_instance == null)
-                        {
-                            _instance = new Config();
-                        }   
-                    }
+                         _instance = new Config();
+                    }   
                 }
                 return _instance;
             }   
