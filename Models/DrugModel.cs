@@ -24,16 +24,12 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-
-                    lock (_lock)
+                    if (_instance == null)
                     {
-                        if (_instance == null)
-                        {
-                            _instance = new DrugModel();
-                        }   
-                    }
+                         _instance = new DrugModel();
+                    }   
                 }
                 return _instance;
             }   
