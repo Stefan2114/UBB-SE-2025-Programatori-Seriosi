@@ -14,6 +14,7 @@ namespace Team3.Models
         private static MessageModel? _instance;
         private readonly Config _config;
         private Task<List<Message>> _messages;
+        private static readonly object _lock = new object();
 
         private MessageModel()
         {
@@ -24,9 +25,12 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new MessageModel();
+                    if (_instance == null)
+                    {
+                        _instance = new MessageModel();
+                    }   
                 }
                 return _instance;
             }
