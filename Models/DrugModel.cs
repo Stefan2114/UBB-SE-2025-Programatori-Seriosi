@@ -37,7 +37,7 @@ namespace Team3.Models
 
         public Drug getDrug(int Id)
         {
-            const string query = "SELECT * FROM Drugs WHERE id = @mrId;";
+            const string query = "SELECT * FROM Drugs WHERE id = @id;";
 
             try
             {
