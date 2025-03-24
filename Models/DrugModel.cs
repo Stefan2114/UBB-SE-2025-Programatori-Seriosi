@@ -12,8 +12,8 @@ namespace Team3.Models
     public class DrugModel
     {
         private static DrugModel? _instance;
+        private static readonly object _lock = new object();
         private readonly Config _config;
-        private Task<List<Drug>> _drugs;
 
         private DrugModel()
         {
@@ -26,10 +26,17 @@ namespace Team3.Models
             {
                 if (_instance == null)
                 {
-                    _instance = new DrugModel();
+
+                    lock (_lock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new DrugModel();
+                        }   
+                    }
                 }
                 return _instance;
-            }
+            }   
         }
 
         public Drug getReview(int mrId)
