@@ -13,16 +13,18 @@ namespace Team3.Entities
         public int DrugId {  get; set; }
         public double Quantity {  get; set; }
         public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
         public DateOnly StartDate { get; set; }
         public int NrDays {  get; set; }
 
-        public TreatmentDrug(int id,int treatmentId,int drugId, double quantity, TimeOnly startTime, DateOnly startDate, int nrDays)
+        public TreatmentDrug(int id,int treatmentId,int drugId, double quantity, TimeOnly startTime, TimeOnly endTime, DateOnly startDate, int nrDays)
         {
             this.Id = id;
             this.TreatmentId=treatmentId;
             this.DrugId = drugId;
             this.Quantity = quantity;
             this.StartTime = startTime;
+            this.EndTime = endTime;
             this.StartDate = startDate;
             this.NrDays = nrDays;
         }
@@ -34,7 +36,7 @@ namespace Team3.Entities
         override
         public string ToString()
         {
-            return $"Id: {Id}, TreatmentId:{TreatmentId}, DrugId: {DrugId}, Quantity: {Quantity}, StartTime: {StartTime}, StartDate: {StartDate}, Days: {NrDays}";
+            return $"Id: {Id}, TreatmentId:{TreatmentId}, DrugId: {DrugId}, Quantity: {Quantity}, StartTime: {StartTime},EndTime: {EndTime}, StartDate: {StartDate}, Days: {NrDays}";
         }
     }
 }

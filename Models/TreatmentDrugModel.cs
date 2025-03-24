@@ -60,13 +60,14 @@ namespace Team3.Models
                     treatmentdrug.DrugId = reader.GetInt32(2);
                     treatmentdrug.Quantity = reader.GetDouble(3);
                     treatmentdrug.StartTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4));
-                    treatmentdrug.StartDate = DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(5));
-                    treatmentdrug.NrDays = reader.GetInt32(6);
+                    treatmentdrug.EndTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(5));
+                    treatmentdrug.StartDate = DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(6));
+                    treatmentdrug.NrDays = reader.GetInt32(7);
                     TreatmentDrugList.Add(treatmentdrug);
                 }
-                return TreatmentDrugList;
 
                 connection.Close();
+                return TreatmentDrugList;
 
             }
             catch (Exception e)
