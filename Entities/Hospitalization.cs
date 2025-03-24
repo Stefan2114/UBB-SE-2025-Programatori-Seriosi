@@ -8,15 +8,18 @@ namespace Team3.Entities
 {
     public class Hospitalization
     {
-        public int HospitalizationId { get; set; }
+        public int Id { get; set; }
+        public int RoomId { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; } // Nullable for potential null values
 
-        public Hospitalization(int hospitalizationId, DateTime startDate, DateTime endDate)
+        public Hospitalization(int id, int roomId, DateTime startDate, DateTime? endDate)
         {
-            this.HospitalizationId = hospitalizationId;
-            this.StartDate = startDate;
-            this.EndDate = endDate;
+            Id = id;
+            RoomId = roomId;
+            StartDate = startDate;
+            EndDate = endDate;
         }
     }
+
 }

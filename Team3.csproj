@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ModelViews\" />
-    <Folder Include="SqlCommands\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>

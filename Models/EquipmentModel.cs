@@ -8,6 +8,7 @@ namespace Team3.Models
     public class EquipmentModel
     {
         private static EquipmentModel? _instance;
+        private static readonly object _lock = new object();
         private readonly Config _config;
 
         private EquipmentModel()
@@ -19,9 +20,12 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new EquipmentModel();
+                    if (_instance == null)
+                    {
+                        _instance = new EquipmentModel();
+                    }
                 }
                 return _instance;
             }
@@ -29,29 +33,30 @@ namespace Team3.Models
 
         public List<Equipment> GetEquipment()
         {
-            const string query = "SELECT EquipmentId, Name, Model FROM Equipment;";
+            const string query = "SELECT * FROM Equipment;";
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(query, connection);
-                    List<Equipment> equipmentList = new List<Equipment>();
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+            
+                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection);
+                List<Equipment> equipmentList = new List<Equipment>();
 
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            equipmentList.Add(new Equipment(
-                                reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetString(2)
-                            ));
-                        }
-                    }
-                    return equipmentList;
+                SqlDataReader reader = command.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    equipmentList.Add(new Equipment(
+                             reader.GetInt32(0),
+                             reader.GetString(1),
+                             reader.GetString(2)
+                    ));
                 }
+
+                connection.Close();
+                return equipmentList;
+             
             }
             catch (Exception e)
             {

@@ -8,6 +8,7 @@ namespace Team3.Models
     public class HospitalizationModel
     {
         private static HospitalizationModel? _instance;
+        private static readonly object _lock = new object();
         private readonly Config _config;
 
         private HospitalizationModel()
@@ -19,9 +20,12 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new HospitalizationModel();
+                    if (_instance == null)
+                    {
+                        _instance = new HospitalizationModel();
+                    }
                 }
                 return _instance;
             }
@@ -29,30 +33,28 @@ namespace Team3.Models
 
         public List<Hospitalization> GetHospitalizations()
         {
-            const string query = "SELECT HospitalizationId, RoomId, StartDate, EndDate FROM Hospitalization;";
+            const string query = "SELECT * FROM Hospitalization;";
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(query, connection);
-                    List<Hospitalization> hospitalizations = new List<Hospitalization>();
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection);
+                List<Hospitalization> hospitalizationList = new List<Hospitalization>();
 
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            hospitalizations.Add(new Hospitalization(
-                                reader.GetInt32(0),
-                                reader.GetInt32(1),
-                                reader.GetDateTime(2),
-                                reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3)
-                            ));
-                        }
-                    }
-                    return hospitalizations;
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    hospitalizationList.Add(new Hospitalization(
+                        reader.GetInt32(0),  // HospitalizationId
+                        reader.GetInt32(1),  // RoomId
+                        reader.GetDateTime(2),  // StartDate
+                        reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3)  // EndDate (nullable)
+                    ));
                 }
+
+                connection.Close();
+                return hospitalizationList;
             }
             catch (Exception e)
             {
