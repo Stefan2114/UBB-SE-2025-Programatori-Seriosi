@@ -14,8 +14,7 @@ namespace Team3.Models
 
         private static UserModel? _instance;
         private readonly Config _config;
-        private Task<List<User>> _users;
-
+        private static readonly object _lock = new object();
         private UserModel()
         {
             _config = Config.Instance;
@@ -25,12 +24,15 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new UserModel();
+                    if (_instance == null)
+                    {
+                        _instance = new DrugModel();
+                    }   
                 }
                 return _instance;
-            }
+            }   
         }
 
 
