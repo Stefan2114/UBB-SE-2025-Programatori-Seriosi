@@ -11,8 +11,8 @@ namespace Team3.Models
     public class TreatmentDrugModel
     {
         private static TreatmentDrugModel? _instance;
+        private static readonly object _lock = new object();
         private readonly Config _config;
-        private Task<List<TreatmentDrug>> _treatmentdrugs;
 
         private TreatmentDrugModel()
         {
@@ -23,9 +23,12 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new TreatmentDrugModel();
+                    if (_instance == null)
+                    {
+                        _instance = new TreatmentDrugModel();
+                    }
                 }
                 return _instance;
             }
@@ -37,36 +40,34 @@ namespace Team3.Models
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@mrId", mrId);
+
+                List<TreatmentDrug> TreatmentDrugList = new List<TreatmentDrug>();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
                 {
-
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-
-                        command.Parameters.AddWithValue("@mrId", mrId);
-
-                        List<TreatmentDrug> TreatmentDrugList = new List<TreatmentDrug>();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                TreatmentDrug treatmentdrug = new TreatmentDrug();
-                                treatmentdrug.Id = reader.GetInt32(0);
-                                treatmentdrug.TreatmentId = reader.GetInt32(1);
-                                treatmentdrug.DrugId = reader.GetInt32(2);
-                                treatmentdrug.Quantity = reader.GetDouble(3);
-                                treatmentdrug.StartTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4));
-                                treatmentdrug.StartDate = DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(5));
-                                treatmentdrug.NrDays = reader.GetInt32(6);
-                                TreatmentDrugList.Add(treatmentdrug);
-                            }
-                            return TreatmentDrugList;
-                        }
-                    }
+                    TreatmentDrug treatmentdrug = new TreatmentDrug();
+                    treatmentdrug.Id = reader.GetInt32(0);
+                    treatmentdrug.TreatmentId = reader.GetInt32(1);
+                    treatmentdrug.DrugId = reader.GetInt32(2);
+                    treatmentdrug.Quantity = reader.GetDouble(3);
+                    treatmentdrug.StartTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4));
+                    treatmentdrug.StartDate = DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(5));
+                    treatmentdrug.NrDays = reader.GetInt32(6);
+                    TreatmentDrugList.Add(treatmentdrug);
                 }
+                return TreatmentDrugList;
+
+                connection.Close();
+
             }
             catch (Exception e)
             {

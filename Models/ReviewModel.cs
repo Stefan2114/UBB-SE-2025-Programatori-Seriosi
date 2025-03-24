@@ -12,8 +12,8 @@ namespace Team3.Models
     public class ReviewModel
     {
         private static ReviewModel? _instance;
+        private static readonly object _lock = new object();
         private readonly Config _config;
-        private Task<List<Review>> _reviews;
 
         private ReviewModel()
         {
@@ -24,9 +24,12 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new ReviewModel();
+                    if (_instance == null)
+                    {
+                        _instance = new ReviewModel();
+                    }
                 }
                 return _instance;
             }
@@ -35,27 +38,22 @@ namespace Team3.Models
         public void addReview(Review review)
         {
             const string query = "INSERT INTO Reviews (id, MedicalRecordId, message, nrStars) VALUES (@Id, @MedicalRecordId, @Message, @NrStars)";
-            
+
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
 
-                    connection.Open();
+                connection.Open();
 
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
+                SqlCommand command = new SqlCommand(query, connection);
 
-                        command.Parameters.AddWithValue("@Id", review.Id);
-                        command.Parameters.AddWithValue("@MedicalRecordId", review.medicalRecordId);
-                        command.Parameters.AddWithValue("@Message", review.Message);
-                        command.Parameters.AddWithValue("@NrStars", review.NrStars);
+                command.Parameters.AddWithValue("@Id", review.Id);
+                command.Parameters.AddWithValue("@MedicalRecordId", review.medicalRecordId);
+                command.Parameters.AddWithValue("@Message", review.Message);
+                command.Parameters.AddWithValue("@NrStars", review.NrStars);
 
-                        command.ExecuteNonQuery();
-
-
-                    }
-                }
+                command.ExecuteNonQuery();
+                connection.Close();
 
             }
             catch (Exception e)
@@ -70,28 +68,27 @@ namespace Team3.Models
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
 
-                    connection.Open();
+                connection.Open();
 
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
+                SqlCommand command = new SqlCommand(query, connection);
 
-                        command.Parameters.AddWithValue("@mrId",mrId);
+                command.Parameters.AddWithValue("@mrId", mrId);
 
-                        Review review = new Review();
+                Review review = new Review();
 
-                        SqlDataReader reader = command.ExecuteReader();
-                        reader.Read();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
 
-                        review.Id = reader.GetInt32(0);
-                        review.medicalRecordId = reader.GetInt32(1);
-                        review.Message = reader.GetString(2);
-                        review.NrStars = reader.GetInt32(3);
-                        return review;
-                    }
-                }
+                review.Id = reader.GetInt32(0);
+                review.medicalRecordId = reader.GetInt32(1);
+                review.Message = reader.GetString(2);
+                review.NrStars = reader.GetInt32(3);
+
+                connection.Close();
+                return review;
+
             }
             catch (Exception e)
             {

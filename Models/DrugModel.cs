@@ -12,8 +12,8 @@ namespace Team3.Models
     public class DrugModel
     {
         private static DrugModel? _instance;
+        private static readonly object _lock = new object();
         private readonly Config _config;
-        private Task<List<Drug>> _drugs;
 
         private DrugModel()
         {
@@ -24,41 +24,44 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new DrugModel();
+                    if (_instance == null)
+                    {
+                        _instance = new DrugModel();
+                    }
                 }
                 return _instance;
             }
         }
 
-        public Drug getReview(int mrId)
+        public Drug getDrug(int Id)
         {
             const string query = "SELECT * FROM Drugs WHERE id = @mrId;";
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
 
-                    connection.Open();
 
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
+                connection.Open();
 
-                        command.Parameters.AddWithValue("@mrId", mrId);
+                SqlCommand command = new SqlCommand(query, connection);
 
-                        Drug drug = new Drug();
 
-                        SqlDataReader reader = command.ExecuteReader();
-                        reader.Read();
+                command.Parameters.AddWithValue("@mrId", Id);
 
-                        drug.Id = reader.GetInt32(0);
-                        drug.Name = reader.GetString(1);
-                        drug.Administration= reader.GetString(2);
-                        return drug;
-                    }
-                }
+                Drug drug = new Drug();
+
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+
+                drug.Id = reader.GetInt32(0);
+                drug.Name = reader.GetString(1);
+                drug.Administration = reader.GetString(2);
+                connection.Close();
+                return drug;
+
             }
             catch (Exception e)
             {
