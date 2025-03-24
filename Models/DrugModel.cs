@@ -38,27 +38,27 @@ namespace Team3.Models
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+                
 
-                    connection.Open();
+                connection.Open();
 
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
+                SqlCommand command = new SqlCommand(query, connection);
+                
 
-                        command.Parameters.AddWithValue("@mrId", mrId);
+                command.Parameters.AddWithValue("@mrId", mrId);
 
-                        Drug drug = new Drug();
+                Drug drug = new Drug();
 
-                        SqlDataReader reader = command.ExecuteReader();
-                        reader.Read();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
 
-                        drug.Id = reader.GetInt32(0);
-                        drug.Name = reader.GetString(1);
-                        drug.Administration= reader.GetString(2);
-                        return drug;
-                    }
-                }
+                drug.Id = reader.GetInt32(0);
+                drug.Name = reader.GetString(1);
+                drug.Administration= reader.GetString(2);
+                connection.Close();
+                return drug;
+                
             }
             catch (Exception e)
             {
