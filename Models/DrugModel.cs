@@ -32,7 +32,7 @@ namespace Team3.Models
                     }
                 }
                 return _instance;
-            }
+            }   
         }
 
         public Drug getDrug(int Id)
