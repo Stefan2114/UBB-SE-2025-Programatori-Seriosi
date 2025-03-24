@@ -64,9 +64,9 @@ namespace Team3.Models
                     treatmentdrug.NrDays = reader.GetInt32(6);
                     TreatmentDrugList.Add(treatmentdrug);
                 }
-                return TreatmentDrugList;
 
                 connection.Close();
+                return TreatmentDrugList;
 
             }
             catch (Exception e)
