@@ -65,7 +65,7 @@ namespace Team3.Models
                     {
                         if (reader.Read())
                         {
-                            return new MedicalRecord((int)reader["Id"], (int)reader["PatientId"], (int)reader["DoctorId"]);
+                            return new MedicalRecord((int)reader["Id"], (int)reader["PatientId"], (int)reader["DoctorId"]); //
                         }
                     }
                 }

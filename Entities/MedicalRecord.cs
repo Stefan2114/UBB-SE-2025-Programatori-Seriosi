@@ -11,23 +11,20 @@ public class MedicalRecord
     public int Id { get; set; }
     public int PatientId { get; set; }
 
+    public int DoctorId { get; set; }
+
     public List<Treatment> Treatments { get; set; } = new List<Treatment>();
     public List<Review> Reviews { get; set; } = new List<Review>();
 
-    public MedicalRecord(int id, int patientId)
+    public MedicalRecord(int id, int patientId, int doctorId)
     {
         Id = id;
         PatientId = patientId;
-    }
-    /*     
-    // mabe needed?
-    public void AddTreatment(Treatment treatment)
-    {
-        Treatments.Add(treatment);
+        DoctorId = doctorId;
     }
 
-    public void AddReview(Review review)
+    public override string ToString()
     {
-        Reviews.Add(review);
-    }*/
+        return $"[MedicalRecord] ID: {Id}, Patient ID: {PatientId}, Doctor ID : {DoctorId}";
+    }
 }
