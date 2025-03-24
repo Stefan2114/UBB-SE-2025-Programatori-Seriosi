@@ -5,31 +5,31 @@ using Team3.Entities;
 
 namespace Team3.Models
 {
-    public class EquipmentModel
+    public class HospitalizationModel
     {
-        private static EquipmentModel? _instance;
+        private static HospitalizationModel? _instance;
         private readonly Config _config;
 
-        private EquipmentModel()
+        private HospitalizationModel()
         {
             _config = Config.Instance;
         }
 
-        public static EquipmentModel Instance
+        public static HospitalizationModel Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new EquipmentModel();
+                    _instance = new HospitalizationModel();
                 }
                 return _instance;
             }
         }
 
-        public List<Equipment> GetEquipment()
+        public List<Hospitalization> GetHospitalizations()
         {
-            const string query = "SELECT EquipmentId, Name, Model FROM Equipment;";
+            const string query = "SELECT HospitalizationId, RoomId, StartDate, EndDate FROM Hospitalization;";
 
             try
             {
@@ -37,25 +37,26 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
-                    List<Equipment> equipmentList = new List<Equipment>();
+                    List<Hospitalization> hospitalizations = new List<Hospitalization>();
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            equipmentList.Add(new Equipment(
+                            hospitalizations.Add(new Hospitalization(
                                 reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetString(2)
+                                reader.GetInt32(1),
+                                reader.GetDateTime(2),
+                                reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3)
                             ));
                         }
                     }
-                    return equipmentList;
+                    return hospitalizations;
                 }
             }
             catch (Exception e)
             {
-                throw new Exception("Error getting equipment", e);
+                throw new Exception("Error getting hospitalizations", e);
             }
         }
     }
