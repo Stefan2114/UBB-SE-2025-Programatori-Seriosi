@@ -1,36 +1,69 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using Team3.Entities;
 
 namespace Team3.Models
 {
     public class PatientModel
     {
-        private DbConnection dbConnection;
-        
-        public PatientModel(DbConnection dbConnection)
-        {
-            this.dbConnection = dbConnection;
+        private static PatientModel? _instance;
+        private static readonly object _lock = new object();
+        private readonly Config _config;
+        private PatientModel() {
+            _config = Config.Instance;
         }
 
-        public Patient getPatient(int id)
+        public static PatientModel Instance
         {
-            dbConnection.Open();
-            DbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = "SELECT * FROM Patients WHERE id = @Id";
-            DbParameter idParameter = dbCommand.CreateParameter();
-            idParameter.ParameterName = "@Id";
-            idParameter.Value = id;
-            dbCommand.Parameters.Add(idParameter);
-            DbDataReader dbDataReader = dbCommand.ExecuteReader();
-            dbDataReader.Read();
-            Patient patient = new Patient(dbDataReader.GetInt32(0), dbDataReader.GetString(1), dbDataReader.GetString(2));
-            dbConnection.Close();
-            return patient;
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (_lock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new PatientModel();
+                        }
+                    }
+                }
+                return _instance;
+            }
+        }
+
+        public Patient GetPatient(int id)
+        {
+            const string query = "SELECT id, name, address FROM Patients WHERE id = @Id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read()) // Check if data is available before accessing it
+                            {
+                                return new Patient(
+                                    reader.GetInt32(reader.GetOrdinal("id")),
+                                    reader.GetString(reader.GetOrdinal("name")),
+                                    reader.GetString(reader.GetOrdinal("address"))
+                                );
+                            }
+                        }
+                    }
+                }
+
+                throw new Exception("Patient not found");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving patient", e);
+            }
         }
     }
 }
