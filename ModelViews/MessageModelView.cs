@@ -11,7 +11,7 @@ using Windows.Services.Maps;
 
 namespace Team3.ModelViews
 {
-    class MessageModelView
+    public class MessageModelView
     {
         private readonly MessageModel _messageModel;
         private int chat_id;
@@ -20,6 +20,7 @@ namespace Team3.ModelViews
 
         public MessageModelView()
         {
+            Debug.WriteLine("MessageModelView created");
             _messageModel = MessageModel.Instance;
             Messages = new ObservableCollection<Message>();
             loadMessages();
@@ -27,7 +28,8 @@ namespace Team3.ModelViews
 
         public Dictionary<string, Message> getMessagesByChatId(int chat_id)
         {
-            List<Message> messages = _messageModel.getMessagesByChatId(chat_id);
+            List<Message> messages = _messageModel.GetMessagesByChatId(chat_id);
+            Debug.WriteLine(messages.Count + "Messages loadedsasd");
             Dictionary<string, Message> messagesDict = new Dictionary<string, Message>();
             foreach (Message message in messages)
             {
@@ -44,14 +46,17 @@ namespace Team3.ModelViews
 
         public void loadMessages()
         {
+            Debug.WriteLine("Loading messages");
             try
             {
-                Dictionary<string, Message> messages = getMessagesByChatId(chat_id);
+                Dictionary<string, Message> messages = getMessagesByChatId(1);
+                Debug.WriteLine(messages.Count);
                 foreach (KeyValuePair<string, Message> message in messages)
                 {
                     Messages.Add(message.Value);
                     Debug.WriteLine("Message loaded: " + message.Value.content);
                 }
+                Debug.WriteLine(Messages.Count + " messages loaded");
             }
             catch (Exception e)
             {

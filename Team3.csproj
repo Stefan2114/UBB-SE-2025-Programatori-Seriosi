@@ -13,7 +13,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Page Remove="Views\MessageView.xaml" />
+    <None Remove="Views\MessageView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,9 +47,9 @@
     <Folder Include="SqlCommands\" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Views\MessageView.xaml">
+    <Page Update="Views\MessageView.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </None>
+    </Page>
   </ItemGroup>
 
   <!--
