@@ -9,6 +9,7 @@ namespace Team3.Models
     {
         private static MedicalRecordModel? _instance;
         private readonly Config _config;
+        private static readonly object _lock = new object();
 
         private MedicalRecordModel()
         {
@@ -19,17 +20,20 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new MedicalRecordModel();
+                    if (_instance == null)
+                    {
+                        _instance = new MedicalRecordModel();
+                    }
+                    return _instance;
                 }
-                return _instance;
             }
         }
 
         public void AddMedicalRecord(MedicalRecord medicalRecord)
         {
-            const string query = "INSERT INTO MedicalRecords (Id, PatientId) VALUES (@Id, @PatientId);";
+            const string query = "INSERT INTO MedicalRecords (Id, PatientId, DoctorId) VALUES (@Id, @PatientId, @DoctorId);";
 
             try
             {
@@ -39,7 +43,7 @@ namespace Team3.Models
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Id", medicalRecord.Id);
                     command.Parameters.AddWithValue("@PatientId", medicalRecord.PatientId);
-
+                    command.Parameters.AddWithValue("@DoctorId", medicalRecord.DoctorId);
                     command.ExecuteNonQuery();
                 }
             }
@@ -65,7 +69,7 @@ namespace Team3.Models
                     {
                         if (reader.Read())
                         {
-                            return new MedicalRecord((int)reader["Id"], (int)reader["PatientId"]);
+                            return new MedicalRecord((int)reader["Id"], (int)reader["PatientId"], (int)reader["DoctorId"]); //
                         }
                     }
                 }

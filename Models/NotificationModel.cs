@@ -9,6 +9,7 @@ namespace Team3.Models
     {
         private static NotificationModel? _instance;
         private readonly Config _config;
+        private static readonly object _lock = new object();
 
         private NotificationModel()
         {
@@ -19,11 +20,14 @@ namespace Team3.Models
         {
             get
             {
-                if (_instance == null)
+                lock (_lock)
                 {
-                    _instance = new NotificationModel();
+                    if (_instance == null)
+                    {
+                        _instance = new NotificationModel();
+                    }
+                    return _instance;
                 }
-                return _instance;
             }
         }
 
