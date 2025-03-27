@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using Team3.Domain;
 using Team3.Models;
 //Mi a trebuit mie clasa si am creato eu cu gpt dar nu e taskul meu sherdy
@@ -35,7 +36,7 @@ namespace Team3.ModelViews
                 {
                     foreach (var room in roomList)
                     {
-                        Debug.WriteLine($"Room: {room.RoomId}, Name: {room.RoomName}, Department ID: {room.DepartmentId}");
+                        Debug.WriteLine($"Room: {room.Id}, Department ID: {room.DepartmentId}");
                         Rooms.Add(room);
                         RoomsInfo.Add(room);
                     }
@@ -52,14 +53,16 @@ namespace Team3.ModelViews
         }
 
         // Filter rooms by department ID
-        public List<Room> GetRoomsByDepartmentId(int departmentId)
+       
+        public ObservableCollection<Room> GetRoomsByDepartmentId(int departmentId)
         {
             try
             {
-                var roomList = _roomModel.GetRooms();
-                var filteredRooms = roomList.FindAll(r => r.DepartmentId == departmentId);
+                var filteredRooms = new ObservableCollection<Room>(
+                    _roomModel.GetRooms().Where(r => r.DepartmentId == departmentId)
+                );
 
-                if (filteredRooms.Count == 0)
+                if (!filteredRooms.Any())
                 {
                     Debug.WriteLine($"No rooms found for Department ID: {departmentId}");
                 }
@@ -69,6 +72,77 @@ namespace Team3.ModelViews
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error filtering rooms by Department ID: {ex.Message}");
+                throw;
+            }
+        }
+
+        // Get equipment by Department ID and date range
+
+        //Eu n am avut de facut Equipment dar cand vei da merge ar trebui sa mearga
+        public List<Equipment> GetEquipmentsByDepartmentId(int departmentId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                // Get all rooms for the given department
+                var departmentRooms = _roomModel.GetRooms().Where(r => r.DepartmentId == departmentId).ToList();
+
+                if (!departmentRooms.Any())
+                {
+                    Debug.WriteLine($"No rooms found for Department ID: {departmentId}");
+                    return new List<Equipment>();  //Eu n am avut de facut Equipment dar cand vei da merge ar trebui sa mearga
+                }
+
+                // Get equipment used in these rooms within the date range
+                var roomIds = departmentRooms.Select(r => r.Id).ToList();
+                var equipmentList = _equipmentModel.GetEquipmentsByRoomsAndDate(roomIds, startDate, endDate);  //Eu n am avut de facut Equipment dar cand vei da merge ar trebui sa mearga
+
+                if (!equipmentList.Any())
+                {
+                    Debug.WriteLine($"No equipment found for Department ID: {departmentId} between {startDate} and {endDate}");
+                }
+
+                return equipmentList;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving equipment: {ex.Message}");
+                throw;
+            }
+        }
+
+
+        //same here eu n am Hospitalization in taksurile mele si deaia exiosta erorile
+        public List<Hospitalization> GetHospitalizationByDepartmentID(int departmentId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                // get the room assosicated with the departments
+                var roomList = _roomModel.GetRooms();
+                var departmentRooms = roomList.Where(r => r.DepartmentId == departmentId).Select(r => r.Id).ToList();
+
+                if (!departmentRooms.Any())
+                {
+                    Debug.WriteLine($"Nu există camere pentru departamentul ID: {departmentId}");
+                    return new List<Hospitalization>();  //same here eu n am Hospitalization in taksurile mele si deaia exiosta erorile
+                }
+
+                // get the specializations based on department id
+                var hospitalizations = _hospitalizationModel.GetHospitalizations()  //same here eu n am Hospitalization in taksurile mele si deaia exiosta erorile
+                    .Where(h => departmentRooms.Contains(h.RoomId) &&
+                                h.StartDate >= startDate &&
+                                h.EndDate <= endDate)
+                    .ToList();
+
+                if (!hospitalizations.Any())
+                {
+                    Debug.WriteLine($"Nu s-au găsit spitalizări pentru departamentul {departmentId} în intervalul {startDate} - {endDate}");
+                }
+
+                return hospitalizations;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eroare la obținerea spitalizărilor: {ex.Message}");
                 throw;
             }
         }

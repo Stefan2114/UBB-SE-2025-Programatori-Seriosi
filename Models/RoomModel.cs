@@ -29,7 +29,8 @@ namespace Team3.Models
 
         public List<Room> GetRooms()
         {
-            const string query = "SELECT RoomId, RoomName, DepartmentId FROM Room;";
+            const string query = "SELECT RoomId, DepartmentId FROM Room;";
+            List<Room> rooms = new List<Room>();
 
             try
             {
@@ -37,26 +38,25 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
-                    List<Room> rooms = new List<Room>();
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             rooms.Add(new Room(
-                                reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetInt32(2)
+                                reader.GetInt32(0), // RoomId
+                                reader.GetInt32(1)  // DepartmentId
                             ));
                         }
                     }
-                    return rooms;
                 }
             }
             catch (Exception e)
             {
                 throw new Exception("Error getting rooms", e);
             }
+
+            return rooms;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Team3.ModelViews
             }
         }
 
-        public List<ShiftType> GetShiftTypesByTimeRange(DateTime startTime, DateTime endTime)
+        public List<ShiftType> GetShiftTypesByTimeRange(TimeOnly startTime, TimeOnly endTime)
         {
             try
             {
@@ -70,6 +70,19 @@ namespace Team3.ModelViews
             {
                 Debug.WriteLine($"Error filtering shift types: {ex.Message}");
                 throw;
+            }
+        }
+
+        public ShiftType? GetShiftType(int shiftTypeID)
+        {
+            try
+            {
+                return _shiftTypeModel.GetShiftType(shiftTypeID);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving shift type with ID {shiftTypeID}: {ex.Message}");
+                return null;
             }
         }
     }

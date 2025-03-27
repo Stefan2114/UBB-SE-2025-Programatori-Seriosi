@@ -8,14 +8,12 @@ namespace Team3.Domain
 {
     public class Room
     {
-        public int RoomId { get; set; }
-        public string RoomName { get; set; }
+        public int Id { get; set; }
         public int DepartmentId { get; set; }
 
-        public Room(int roomId, string roomName, int departmentId)
+        public Room(int id, int departmentId)
         {
-            this.RoomId = roomId;
-            this.RoomName = roomName;
+            this.Id = id;
             this.DepartmentId = departmentId;
         }
     }

@@ -19,7 +19,7 @@ namespace Team3.ModelViews
             Schedules = new ObservableCollection<Schedule>();
         }
 
-        public List<Schedule> GetSchedulesByDoctorId(int doctorId, DateTime startDate, DateTime endDate)
+        public List<Schedule> GetSchedulesByDoctorId(int doctorId, DateOnly startDate, DateOnly endDate)
         {
             try
             {

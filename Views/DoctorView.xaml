@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Team3.Views.DoctorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Doctor View"
+    Width="500"
+    Height="400">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox x:Name="selectDatePeriod" Width="200" Height="30" Margin="10" Grid.Row="0"/>
+        <ListView x:Name="doctorInfoList" Width="350" Height="200" Margin="10" Grid.Row="1"/>
+        <Button x:Name="backButton" Content="Back" Width="100" Height="30" Margin="10" Grid.Row="2"/>
+    </Grid>
+
+</Window>

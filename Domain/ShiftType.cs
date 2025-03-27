@@ -9,10 +9,10 @@ namespace Team3.Domain
    public class ShiftType
     {
         public int ShiftTypeId { get; set; }
-        public DateTime ShiftTypeStartTime { get; set; }
-        public DateTime ShiftTypeEndTime { get; set; }
+        public TimeOnly ShiftTypeStartTime { get; set; }
+        public TimeOnly ShiftTypeEndTime { get; set; }
 
-        public ShiftType(int shiftTypeId, DateTime shiftTypeStartTime, DateTime shiftTypeEndTime)
+        public ShiftType(int shiftTypeId, TimeOnly shiftTypeStartTime, TimeOnly shiftTypeEndTime)
         {
             this.ShiftTypeId = shiftTypeId;
             this.ShiftTypeStartTime = shiftTypeStartTime;

@@ -45,7 +45,9 @@ namespace Team3.Models
                         {
                             records.Add(new MedicalRecord(
                                 reader.GetInt32(0),
-                                reader.GetInt32(1)
+                                reader.GetInt32(1),
+                                reader.GetInt32(2),
+                                DateOnly.FromDateTime(reader.GetDateTime(3))
                             ));
                         }
                     }

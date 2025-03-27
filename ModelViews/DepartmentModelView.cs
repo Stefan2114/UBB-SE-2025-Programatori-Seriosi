@@ -11,47 +11,60 @@ namespace Team3.ModelViews
     {
         // Attributes
         public ObservableCollection<Department> DepartmentsInfo { get; private set; }
-        public ObservableCollection<Department> Departments { get; private set; }
-        private readonly RoomModelView _roomModelView;
         private readonly DepartmentModel _departmentModel;
+        public Action? OnBackNavigation { get; set; } // Delegate for back navigation handling
 
         // Constructor
         public DepartmentModelView()
         {
-            _roomModelView = new RoomModelView(); // Assuming RoomModelView is implemented elsewhere
             _departmentModel = DepartmentModel.Instance;
             DepartmentsInfo = new ObservableCollection<Department>();
-            Departments = new ObservableCollection<Department>();
-            LoadDepartments();
+            LoadDepartmentsInfo();
         }
 
-        // Load all departments
-        private void LoadDepartments()
+        // Load detailed department information
+        public void LoadDepartmentsInfo()
         {
             try
             {
                 var departmentList = _departmentModel.GetDepartments();
+
                 if (departmentList != null && departmentList.Count > 0)
                 {
+                    DepartmentsInfo.Clear(); // Clear old data
                     foreach (var department in departmentList)
                     {
-                        Debug.WriteLine(department.ToString());
-                        Departments.Add(department);
                         DepartmentsInfo.Add(department);
+                        Debug.WriteLine($"Loaded Department: ID = {department.DepartmentId}, Name = {department.DepartmentName}");
                     }
                 }
                 else
                 {
-                    Debug.WriteLine("No departments found.");
+                    Debug.WriteLine("No departments found in the database.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error loading departments: {ex.Message}");
+                Debug.WriteLine($"Error loading department details: {ex.Message}");
             }
         }
 
-        // Add additional functionality as needed
+        // Method to handle date selection in ComboBox
+        public void DateSelectedComboBoxHandler(DateOnly selectedDate)
+        {
+            try
+            {
+                Debug.WriteLine($"Date selected: {selectedDate}");
+                // Refresh department information based on the selected date
+                LoadDepartmentsInfo();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error handling date selection: {ex.Message}");
+            }
+        }
+
+        // Get departments by name
         public List<Department> GetDepartmentsByName(string name)
         {
             try
@@ -70,6 +83,20 @@ namespace Team3.ModelViews
             {
                 Debug.WriteLine($"Error filtering departments: {ex.Message}");
                 throw;
+            }
+        }
+
+        // Handles the Back Button press
+        public void BackButtonHandler()
+        {
+            try
+            {
+                Debug.WriteLine("Back button pressed. Navigating to the previous screen...");
+                OnBackNavigation?.Invoke(); // Calls the delegate if assigned
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error handling back button: {ex.Message}");
             }
         }
     }

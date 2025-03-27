@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.Data;
 using Team3.Domain;
 
 namespace Team3.Models
@@ -29,6 +27,7 @@ namespace Team3.Models
             }
         }
 
+        // Get all shift types
         public List<ShiftType> GetShiftTypes()
         {
             const string query = "SELECT ShiftTypeId, ShiftTypeStartTime, ShiftTypeEndTime FROM ShiftType;";
@@ -46,9 +45,9 @@ namespace Team3.Models
                         while (reader.Read())
                         {
                             shiftTypes.Add(new ShiftType(
-                                reader.GetInt32(0),
-                                reader.GetDateTime(1),
-                                reader.GetDateTime(2)
+                                reader.GetInt32(0), // ShiftTypeId
+                                TimeOnly.FromDateTime(reader.GetDateTime(1)), // StartTime
+                                TimeOnly.FromDateTime(reader.GetDateTime(2))  // EndTime
                             ));
                         }
                     }
@@ -59,6 +58,42 @@ namespace Team3.Models
             {
                 throw new Exception("Error getting shift types", e);
             }
+        }
+
+        // Get a single shift type by ID
+        public ShiftType? GetShiftType(int shiftTypeId)
+        {
+            const string query = "SELECT ShiftTypeId, ShiftTypeStartTime, ShiftTypeEndTime FROM ShiftType WHERE ShiftTypeId = @ShiftTypeId;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@ShiftTypeId", shiftTypeId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read()) // If a result is found
+                            {
+                                return new ShiftType(
+                                    reader.GetInt32(0), // ShiftTypeId
+                                    TimeOnly.FromDateTime(reader.GetDateTime(1)), // StartTime
+                                    TimeOnly.FromDateTime(reader.GetDateTime(2))  // EndTime
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error retrieving shift type with ID {shiftTypeId}", e);
+            }
+
+            return null; // Return null if no shift type is found
         }
     }
 }

@@ -8,17 +8,22 @@ namespace Team3.Domain
 {
     public class MedicalRecord
     {
-        public int MedicalRecordId { get; set; }
+        public int Id { get; set; }
         public int DoctorId { get; set; }
-        public MedicalRecord(int medicalRecordId, int doctorId)
+        public int Patient_id { get; set; }
+
+        public DateOnly recordDate {  get; set; }
+        public MedicalRecord(int id, int doctorId, int patient_id, DateOnly recordDate)
         {
-            this.MedicalRecordId = medicalRecordId;
+            this.Id = id;
             this.DoctorId = doctorId;
+            this.Patient_id = patient_id;
+            this.recordDate = recordDate;
         }
         override
         public string ToString()
         {
-            return $"Id: {MedicalRecordId}, doctor: {DoctorId}";
+            return $"Id:{Id}, doctor: {DoctorId}";
         }
     }
 

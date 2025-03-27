@@ -9,13 +9,13 @@ namespace Team3.Domain
     public class Schedule
     {
         public int ScheduleId { get; set; }
-        public DateTime  ScheduleWorkDay{ get; set; }
+        public DateOnly  ScheduleWorkDay{ get; set; }
 
         public int DoctorId { get; set; }
 
         public int ShiftTypeId { get; set; }
 
-        public Schedule(int scheduleId, DateTime scheduleWorkDay, int doctorId,int shifTypeId)
+        public Schedule(int scheduleId, DateOnly scheduleWorkDay, int doctorId,int shifTypeId)
         {
             this.ScheduleId = scheduleId;
             this.ScheduleWorkDay = scheduleWorkDay;
