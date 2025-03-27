@@ -19,7 +19,7 @@
 
         <!-- Back Button -->
         <Button x:Name="backButton" Content="Back" Width="80"
-                Command="{Binding BackCommand}" HorizontalAlignment="Left"/>
+                Click="BackClicked" HorizontalAlignment="Left"/>
 
         <!-- Chat Messages List -->
         <ListView x:Name="chatMessages" Grid.Row="1"
@@ -59,7 +59,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="messageBar" PlaceholderText="Type a message..." Grid.Column="0" VerticalAlignment="Stretch"/>
-            <Button x:Name="sendButton" Content="Send" Width="80" Margin="10,0,0,0" Grid.Column="1"/>
+            <Button x:Name="sendButton" Content="Send" Width="80" Margin="10,0,0,0" Click="sendButtonClicked" Grid.Column="1"/>
         </Grid>
     </Grid>
 </Window>

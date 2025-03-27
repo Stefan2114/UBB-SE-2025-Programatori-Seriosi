@@ -32,5 +32,17 @@ namespace Team3.Views
             this.InitializeComponent();
             this.chatMessages.DataContext = ViewModel;
         }
+
+        private void BackClicked(object sender, RoutedEventArgs e)
+        {
+            ViewModel.BackButtonHandler();
+        }
+
+        private void sendButtonClicked(object sender, RoutedEventArgs e)
+        {
+            string message = messageBar.Text;
+            ViewModel.sendButtonHandler(message);
+            messageBar.PlaceholderText = "Type a message...";
+        }
     }
 }

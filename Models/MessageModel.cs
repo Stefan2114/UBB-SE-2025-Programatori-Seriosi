@@ -78,7 +78,7 @@ namespace Team3.Models
 
         public void addMessage(Message message)
         {
-            string query = "INSERT INTO messages (message_id, content, user_id, chat_id) VALUES (@message_id, @content, @userId, @chatId)";
+            string query = "INSERT INTO messages (message_id, content, userId, chatId) VALUES (@message_id, @content, @userId, @chatId)";
 
             try
             {

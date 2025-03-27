@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -44,6 +46,12 @@ namespace Team3.ModelViews
             _messageModel.addMessage(message);
         }
 
+        public void setUserIdAndChat(int userId, int chatId)
+        {
+            _userId = userId;
+            chat_id = chatId;
+        }
+
         public void loadMessages()
         {
             Debug.WriteLine("Loading messages");
@@ -62,6 +70,19 @@ namespace Team3.ModelViews
             {
                 throw new Exception("Error while loading messages: " + e.Message);
             }
+        }
+
+
+        public void BackButtonHandler()
+        {
+            Debug.WriteLine("Back button clicked");
+        }
+
+        public void sendButtonHandler(string message)
+        {
+            Debug.WriteLine("Send button clicked");
+            addMessage(_userId, chat_id, message);
+            Messages.Add(new Message(0, message, _userId, chat_id));
         }
     }
 }
