@@ -36,14 +36,14 @@ namespace Team3.ModelViews
             foreach (Message message in messages)
             {
                 messagesDict.Add(message.id.ToString(), message);
+                Debug.WriteLine("Message loaded: " + message.content);
             }
             return messagesDict;
         }
 
         public void addMessage(int user_id, int chat_id, string content)
         {
-            Message message = new Message(0, content, user_id, chat_id);
-            _messageModel.addMessage(message);
+            _messageModel.addMessage(user_id, chat_id, content);
         }
 
         public void setUserIdAndChat(int userId, int chatId)
@@ -57,7 +57,7 @@ namespace Team3.ModelViews
             Debug.WriteLine("Loading messages");
             try
             {
-                Dictionary<string, Message> messages = getMessagesByChatId(1);
+                Dictionary<string, Message> messages = getMessagesByChatId(0);
                 Debug.WriteLine(messages.Count);
                 foreach (KeyValuePair<string, Message> message in messages)
                 {
@@ -81,8 +81,8 @@ namespace Team3.ModelViews
         public void sendButtonHandler(string message)
         {
             Debug.WriteLine("Send button clicked");
-            addMessage(_userId, chat_id, message);
-            Messages.Add(new Message(0, message, _userId, chat_id));
+            int messageID = _messageModel.addMessage(_userId, chat_id, message);
+            Messages.Add(new Message(messageID, message, _userId, chat_id));
         }
     }
 }

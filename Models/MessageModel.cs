@@ -76,30 +76,32 @@ namespace Team3.Models
             }
         }
 
-        public void addMessage(Message message)
+        public int addMessage(int userId, int chatId, string content)
         {
-            string query = "INSERT INTO messages (message_id, content, userId, chatId) VALUES (@message_id, @content, @userId, @chatId)";
+            const string query = "INSERT INTO messages (content, userId, chatId) OUTPUT INSERTED.message_id VALUES (@content, @userId, @chatId)";
 
             try
             {
-                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@content", content);
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@chatId", chatId);
 
-                connection.Open();
-                SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
 
-                command.Parameters.AddWithValue("@message_id", message.id);
-                command.Parameters.AddWithValue("@content", message.content);
-                command.Parameters.AddWithValue("@userId", message.user_id);
-                command.Parameters.AddWithValue("@chatId", message.chat_id);
+                    int newMessageId = (int)command.ExecuteScalar(); // Get the newly inserted message_id
 
-                command.ExecuteNonQuery();
-
-                connection.Close();
+                    Debug.WriteLine($"New message inserted with ID: {newMessageId}");
+                    return newMessageId;
+                }
             }
             catch (Exception e)
             {
-                throw new Exception("Error while connecting to the database: " + e.Message);
+                throw new Exception("Error while adding message: " + e.Message);
             }
         }
+
     }
 }
