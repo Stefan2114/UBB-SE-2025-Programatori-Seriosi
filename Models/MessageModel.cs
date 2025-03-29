@@ -6,10 +6,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Team3.Entities;
+using System.Diagnostics;
 
 namespace Team3.Models
 {
-    class MessageModel
+    public class MessageModel
     {
         private static MessageModel? _instance;
         private readonly Config _config;
@@ -36,66 +37,71 @@ namespace Team3.Models
             }
         }
 
-        public List<Message> getMessagesByChatId(int chatId)
+        public List<Message> GetMessagesByChatId(int chatId)
         {
-            const string query = "SELECT * FROM messages WHERE chat_id = @chatId";
+            Console.WriteLine($"Attempting to connect to: {Config.CONNECTION}");
+            const string query = "SELECT message_id, content, userId, chatId FROM messages WHERE chatId = @chatId";
 
             try
             {
-                SqlConnection connection = new SqlConnection(Config.CONNECTION);
-
-                connection.Open();
-
-                SqlCommand command = new SqlCommand(query, connection);
-                List<Message> messages = new List<Message>();
-
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    while (reader.Read())
+                    command.Parameters.AddWithValue("@chatId", chatId);
+                    Debug.WriteLine("the chat it is:" +  chatId);
+
+                    connection.Open();
+
+                    List<Message> messages = new List<Message>();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        int id = reader.GetInt32(0);
-                        string content = reader.GetString(1);
-                        int uer_id = reader.GetInt32(2);
-                        int chat_id = reader.GetInt32(3);
-                        Message message = new Message(id, content, uer_id, chat_id);
-                        messages.Add(message);
+                        while (reader.Read())
+                        {
+                            messages.Add(new Message(
+                                id: reader.GetInt32(0),
+                                content: reader.GetString(1),
+                                user_id: reader.GetInt32(2),
+                                chat_id: reader.GetInt32(3)
+                            ));
+                        }
                     }
+
+                    return messages;
                 }
-
-                connection.Close();
-
-                return messages;
             }
             catch (Exception e)
             {
-                throw new Exception("Error while connecting to the database: " + e.Message);
+                throw new Exception("Error while loading messages: " + e.Message);
             }
         }
 
-        public void addMessage(Message message)
+        public int addMessage(int userId, int chatId, string content)
         {
-            string query = "INSERT INTO messages (message_id, content, user_id, chat_id) VALUES (@message_id, @content, @userId, @chatId)";
+            const string query = "INSERT INTO messages (content, userId, chatId) OUTPUT INSERTED.message_id VALUES (@content, @userId, @chatId)";
 
             try
             {
-                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@content", content);
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@chatId", chatId);
 
-                connection.Open();
-                SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
 
-                command.Parameters.AddWithValue("@message_id", message.id);
-                command.Parameters.AddWithValue("@content", message.content);
-                command.Parameters.AddWithValue("@userId", message.user_id);
-                command.Parameters.AddWithValue("@chatId", message.chat_id);
+                    int newMessageId = (int)command.ExecuteScalar(); // Get the newly inserted message_id
 
-                command.ExecuteNonQuery();
-
-                connection.Close();
+                    Debug.WriteLine($"New message inserted with ID: {newMessageId}");
+                    return newMessageId;
+                }
             }
             catch (Exception e)
             {
-                throw new Exception("Error while connecting to the database: " + e.Message);
+                throw new Exception("Error while adding message: " + e.Message);
             }
         }
+
     }
 }

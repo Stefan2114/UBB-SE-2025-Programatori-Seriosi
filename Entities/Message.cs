@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Team3.Entities
 {
-    class Message
+    public class Message
     {
         public int id { get; set; }
         public string content { get; set; }

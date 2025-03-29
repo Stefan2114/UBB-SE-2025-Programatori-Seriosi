@@ -29,8 +29,8 @@ namespace Team3
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            MainWindow window = new MainWindow();
-            window.Activate();
+            m_window = new Views.MessageView();
+            m_window.Activate();
         }
 
     }
