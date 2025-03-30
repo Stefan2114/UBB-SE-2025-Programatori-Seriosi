@@ -6,26 +6,24 @@ using System.Threading.Tasks;
 
 namespace Team3.Entities
 {
-    public class User
+    public class Drug
     {
-
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Role { get; set; }
+        public string Administration { get; set; }
 
-
-        public User(int id, string name, string role)
+        public Drug(int id, string name, string administration)
         {
-            Id = id;
-            Name = name;
-            Role = role;
+            this.Id = id;
+            this.Name = name;
+            this.Administration = administration;
         }
+
 
         override
         public string ToString()
         {
-            return $"Id: {Id}, Name: {Name}, Role: {Role}";
+            return $"Id: {Id}, Name: {Name}, Administration: {Administration}";
         }
-
     }
 }
