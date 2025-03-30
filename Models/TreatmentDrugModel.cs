@@ -36,7 +36,7 @@ namespace Team3.Models
 
         public void addTreatmentDrug(TreatmentDrug treatmentDrug)
         {
-            const string query = "INSERT INTO TreatmentDrugs(Id,TreatmentId,DrugId,Quantity,StartTime,EndTime,StartDate,NrDays) VALUES (@Id,@TreatmentId,@DrugId,@Quantity,@StartTime,@EndTime,@StartDate,@NrDays)";
+            const string query = "INSERT INTO TreatmentDrugs(id,treatment_id,drug_id,quantity,starttime,endtime,startdate,nrdays) VALUES (@id,@treatment_id,@drug_id,@quantity,@starttime,@endtime,@startdate,@nrdays)";
             try
             {
                 SqlConnection connection = new SqlConnection(Config.CONNECTION);
@@ -45,15 +45,14 @@ namespace Team3.Models
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@Id", treatmentDrug.Id);
-                command.Parameters.AddWithValue("@TreatmentId", treatmentDrug.TreatmentId);
-                command.Parameters.AddWithValue("@DrugId", treatmentDrug.DrugId);
-                command.Parameters.AddWithValue("@Quantity", treatmentDrug.Quantity);
-                command.Parameters.AddWithValue("@Quantity", treatmentDrug.Quantity);
-                command.Parameters.AddWithValue("@StartTime", treatmentDrug.StartTime);
-                command.Parameters.AddWithValue("@EndTime", treatmentDrug.EndTime);
-                command.Parameters.AddWithValue("@StartDate", treatmentDrug.StartDate);
-                command.Parameters.AddWithValue("@NrDays", treatmentDrug.NrDays);
+                command.Parameters.AddWithValue("@id", treatmentDrug.Id);
+                command.Parameters.AddWithValue("@treatment_id", treatmentDrug.TreatmentId);
+                command.Parameters.AddWithValue("@drug_id", treatmentDrug.DrugId);
+                command.Parameters.AddWithValue("@quantity", treatmentDrug.Quantity);
+                command.Parameters.AddWithValue("@starttime", treatmentDrug.StartTime);
+                command.Parameters.AddWithValue("@endtime", treatmentDrug.EndTime);
+                command.Parameters.AddWithValue("@startdate", treatmentDrug.StartDate);
+                command.Parameters.AddWithValue("@nrdays", treatmentDrug.NrDays);
 
                 command.ExecuteNonQuery();
                 connection.Close();

@@ -63,7 +63,7 @@ namespace Team3.Views
         }
         private void NavigateToMainPage_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage)); // Navigate to ReviewView
+            //this.Frame.Navigate(typeof(MainPage)); // Navigate to ReviewView
         }
     }
 }

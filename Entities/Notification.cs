@@ -4,21 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Notification
+namespace Team3.Entities
 {
-    public int Id { get; set; }
-    public DateTime DeliveryDateTime { get; set; }
-    public string Message { get; set; }
-
-    public Notification(int id, DateTime deliveryDateTime, string message)
+    public class Notification
     {
-        Id = id;
-        DeliveryDateTime = deliveryDateTime;
-        Message = message;
-    }
+        public int Id { get; set; }
+        public DateTime DeliveryDateTime { get; set; }
+        public string Message { get; set; }
 
-    public override string ToString()
-    {
-        return $"[Notification] ID: {Id}, Delivery: {DeliveryDateTime}, Message: {Message}";
+        public Notification(int id, DateTime deliveryDateTime, string message)
+        {
+            Id = id;
+            DeliveryDateTime = deliveryDateTime;
+            Message = message;
+        }
+
+        public override string ToString()
+        {
+            return $"[Notification] ID: {Id}, Delivery: {DeliveryDateTime}, Message: {Message}";
+        }
     }
 }
+

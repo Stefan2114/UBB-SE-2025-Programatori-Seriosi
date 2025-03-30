@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Team3.Entities;
-using Windows.UI.Notifications;
 
 namespace Team3.Models
 {

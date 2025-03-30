@@ -15,61 +15,62 @@ namespace Team3.ModelViews
 {
     public class MessageModelView
     {
-        private readonly MessageModel _messageModel;
-        private int chat_id;
-        private int _userId;
-        public ObservableCollection<Message> Messages { get; set; }
+        private readonly MessageModel messageModel;
+        private int chatId;
+        private int userId;
+        public ObservableCollection<String> Messages { get; set; }
 
         public MessageModelView()
         {
             Debug.WriteLine("MessageModelView created");
-            _messageModel = MessageModel.Instance;
-            Messages = new ObservableCollection<Message>();
-            loadMessages();
+            messageModel = MessageModel.Instance;
+            Messages = new ObservableCollection<String>();
         }
 
-        public Dictionary<string, Message> getMessagesByChatId(int chat_id)
-        {
-            List<Message> messages = _messageModel.GetMessagesByChatId(chat_id);
-            Debug.WriteLine(messages.Count + "Messages loadedsasd");
-            Dictionary<string, Message> messagesDict = new Dictionary<string, Message>();
-            foreach (Message message in messages)
-            {
-                messagesDict.Add(message.id.ToString(), message);
-                Debug.WriteLine("Message loaded: " + message.content);
-            }
-            return messagesDict;
-        }
+        //public Dictionary<string, Message> getMessagesByChatId(int chatId)
+        //{
+        //    List<Message> messages = messageModel.GetMessagesByChatId(chatId);
+        //    Debug.WriteLine(messages.Count + "Messages loaded");
+        //    Dictionary<Message, string> messagesDict = new Dictionary<string, Message>();
+        //    foreach (Message message in messages)
+        //    {
+        //        messagesDict.Add(message.id.ToString(), message);
+        //        Debug.WriteLine("Message loaded: " + message.content);
+        //    }
+        //    return messagesDict;
+        //}
 
-        public void addMessage(int user_id, int chat_id, string content)
-        {
-            _messageModel.addMessage(user_id, chat_id, content);
-        }
 
         public void setUserIdAndChat(int userId, int chatId)
         {
-            _userId = userId;
-            chat_id = chatId;
+            userId = userId;
+            chatId = chatId;
         }
 
         public void loadMessages()
         {
-            Debug.WriteLine("Loading messages");
-            try
-            {
-                Dictionary<string, Message> messages = getMessagesByChatId(0);
-                Debug.WriteLine(messages.Count);
-                foreach (KeyValuePair<string, Message> message in messages)
-                {
-                    Messages.Add(message.Value);
-                    Debug.WriteLine("Message loaded: " + message.Value.content);
-                }
-                Debug.WriteLine(Messages.Count + " messages loaded");
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Error while loading messages: " + e.Message);
-            }
+            //Debug.WriteLine("Loading messages");
+            //try
+            //{
+            //    List<Message> messages = messageModel.GetMessagesByChatId(chatId);
+
+            //    foreach (Message message in messages)
+            //    {
+            //        messagesDict.Add(message.id.ToString(), message);
+            //        Debug.WriteLine("Message loaded: " + message.content);
+            //    }
+            //    Debug.WriteLine(messages.Count);
+            //    foreach (KeyValuePair<string, Message> message in messages)
+            //    {
+            //        Messages.Add(message.Value);
+            //        Debug.WriteLine("Message loaded: " + message.Value.content);
+            //    }
+            //    Debug.WriteLine(Messages.Count + " messages loaded");
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new Exception("Error while loading messages: " + e.Message);
+            //}
         }
 
 
@@ -78,11 +79,11 @@ namespace Team3.ModelViews
             Debug.WriteLine("Back button clicked");
         }
 
-        public void sendButtonHandler(string message)
+        public void sendButtonHandler()
         {
             Debug.WriteLine("Send button clicked");
-            int messageID = _messageModel.addMessage(_userId, chat_id, message);
-            Messages.Add(new Message(messageID, message, _userId, chat_id));
+            string message = ""; // get it from a text field
+            //Messages.Add(new Message(messageID, message, _userId, chat_id));
         }
     }
 }
