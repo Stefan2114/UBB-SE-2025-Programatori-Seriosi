@@ -10,10 +10,12 @@ namespace Team3.Entities
 
     public class Doctor
     {
-        private int UserId;
+        public int Id { get; set; }
+        public int UserId { get; set; }
 
-        public Doctor(int userId)
+        public Doctor(int id, int userId)
         {
+            this.Id = id;
             this.UserId = userId;
         }
     }
