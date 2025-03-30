@@ -8,17 +8,17 @@ namespace Team3.Entities
 {
     public class Message
     {
-        public int id { get; set; }
-        public string content { get; set; }
-        public int user_id { get; set; }
-        public int chat_id { get; set; }
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public int UserId { get; set; }
+        public int ChatId { get; set; }
 
-        public Message(int id, string content, int user_id, int chat_id)
+        public Message(int id, string content, int userId, int chatId)
         {
-            this.id = id;
-            this.content = content;
-            this.user_id = user_id;
-            this.chat_id = chat_id;
+            this.Id = id;
+            this.Content = content;
+            this.UserId = userId;
+            this.ChatId = chatId;
         }
     }
 }

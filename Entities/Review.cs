@@ -11,7 +11,7 @@ namespace Team3.Entities
     public class Review
     {
         public int Id { get; set; }
-        public int medicalRecordId {  get; set; }
+        public int MedicalRecordId {  get; set; }
         public string Message { get; set; }
         public int NrStars { get; set; }
 
@@ -19,19 +19,16 @@ namespace Team3.Entities
         public Review(int id,int medicalRecordId, string message, int nrStars)
         {
             this.Id = id;
-            this.medicalRecordId = medicalRecordId;
+            this.MedicalRecordId = medicalRecordId;
             this.Message = message;
             this.NrStars = nrStars;
         }
 
-        public Review()
-        {
-        }
 
         override
         public string ToString()
         {
-            return $"Id: {Id}, MedicalRecordId: {medicalRecordId}, Message: {Message}, Stars: {NrStars}";
+            return $"Id: {Id}, MedicalRecordId: {MedicalRecordId}, Message: {Message}, Stars: {NrStars}";
         }
     }
 }
