@@ -11,15 +11,13 @@ namespace Team3.Entities
     /// a type of User with a specified role
     /// Input: int id, string username, string role
     /// </summary>contains a private int id coming from user
-    public class Doctor : User
+    public class Doctor
     {
-        private int id;
+        private int userId;
 
-        public Doctor(int id, string username, string role)
-            /// <summary>Constructor Doctor
-            : base(id, username, role)
+        public Doctor(int userId)
         {
-            this.id = id;
+            this.userId = userId;
         }
     }
 

@@ -38,9 +38,9 @@ namespace Team3.Models
             }
         }
 
-        public Doctor GetDoctor(int id)
+        public Doctor GetDoctor(int userId)
         {
-            const string query = "SELECT id, name, specialty FROM Doctors WHERE id = @Id";
+            const string query = "SELECT user_id FROM Doctors WHERE user_id = @UserId";
 
             try
             {
@@ -49,17 +49,13 @@ namespace Team3.Models
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Id", id);
+                        command.Parameters.AddWithValue("@UserId", userId);
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                return new Doctor(
-                                    reader.GetInt32(reader.GetOrdinal("id")),
-                                    reader.GetString(reader.GetOrdinal("name")),
-                                    reader.GetString(reader.GetOrdinal("specialty"))
-                                );
+                                return new Doctor(reader.GetInt32(reader.GetOrdinal("user_id")));
                             }
                         }
                     }

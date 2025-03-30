@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Team3.Entities
 {
-    public class Patient : User
+    public class Patient 
     {
-        public int id { get; set; }
-        public Patient(int id, string username, string role) : base(id, username, role)
+        public int userId { get; set; }
+        public Patient(int userId)
         {
-            this.id = id;
+            this.userId = userId;
         }
     }
 }
