@@ -46,7 +46,8 @@ namespace Team3.Views
         {
             if (Frame.CanGoBack)
             {
-                Frame.GoBack();
+                Frame.Navigate(typeof(UserView));
+
             }
         }
 
@@ -59,7 +60,7 @@ namespace Team3.Views
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to NotificationsPage and pass the selected user
-            Frame.Navigate(typeof(NotificationView), SelectedUser);
+            Frame.Navigate(typeof(NotificationView), SelectedUser.Id);
         }
 
     }

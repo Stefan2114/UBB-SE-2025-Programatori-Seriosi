@@ -1,50 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Team3.Entities;
+using Team3.Models;
 
 namespace Team3.ModelViews
 {
+
+
     public class NotificationModelView
     {
+
+        private readonly NotificationModel _notificationModel;
+
         public List<Notification> Notifications { get; private set; }
 
         public NotificationModelView()
         {
-            LoadNotifications();
+            _notificationModel = NotificationModel.Instance;
+            Notifications = new List<Notification>();
         }
 
-        private void LoadNotifications()
+        public void LoadNotifications(int userId)
         {
-            // In a real application, you would fetch the notifications from a database or service
-            // For now, let's create some sample data
-            Notifications = new List<Notification>
+
+            DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
+
+            List<Notification> notifications = _notificationModel.GetUserNotifications(userId);
+            notifications = notifications
+                .Where(n => n.DeliveryDateTime < currentDateTime)
+                .OrderByDescending(n => n.DeliveryDateTime)
+                .ToList();
+            foreach(Notification notification in notifications)
             {
-                new Notification(1, DateTime.Now.AddDays(-1), "Welcome to the application! We're glad to have you here."),
-                new Notification(2, DateTime.Now.AddHours(-5), "Your account settings have been updated."),
-                new Notification(3, DateTime.Now.AddHours(-2), "You have a new message from the administrator."),
-                new Notification(4, DateTime.Now.AddMinutes(-30), "System maintenance scheduled for tonight at 2 AM.")
-            };
+                Notifications.Add(notification);
+                Debug.WriteLine(notification.ToString());
+            }
         }
 
-        public bool DeleteNotification(int notificationId)
+        public void DeleteNotification(int notificationId)
         {
-            // In a real application, you would delete from a database or service
-            try
-            {
-                var notificationToRemove = Notifications.Find(n => n.Id == notificationId);
-
-                if (notificationToRemove != null)
-                {
-                    Notifications.Remove(notificationToRemove);
-                    return true;
-                }
-
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            _notificationModel.deleteNotification(notificationId);
         }
     }
 }

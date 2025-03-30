@@ -10,32 +10,30 @@ namespace Team3.Views
 {
     public sealed partial class NotificationView : Page
     {
-        public User SelectedUser { get; set; }
-        public NotificationModelView ViewModel { get; } = new NotificationModelView();
+        public int UserId { get; set; }
+        public NotificationModelView ModelView { get; } = new NotificationModelView();
 
         public NotificationView()
         {
             this.InitializeComponent();
-            this.NotificationsListView.DataContext = ViewModel;
+            this.NotificationsListView.DataContext = ModelView;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is User user)
+            if (e.Parameter is int userId)
             {
-                SelectedUser = user;
+                UserId = userId;
+                ModelView.LoadNotifications(userId);
                 // In a real app, you might filter notifications by user
-                Debug.WriteLine($"Loading notifications for user: ID={SelectedUser.Id}, Name={SelectedUser.Name}");
+                Debug.WriteLine($"Loading notifications for user: ID={userId}");
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Frame.CanGoBack)
-            {
-                Frame.GoBack();
-            }
+            Frame.Navigate(typeof(OptionsPage), UserId);
         }
 
         private void NotificationsListView_ItemClick(object sender, ItemClickEventArgs e)

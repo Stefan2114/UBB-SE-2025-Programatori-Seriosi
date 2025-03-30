@@ -49,8 +49,9 @@ namespace Team3.Models
                         {
                             notifications.Add(new Notification(
                                 (int)reader[0],
-                                (DateTime)reader[1],
-                                reader[2].ToString()
+                                (int)reader[1],
+                                (DateTime)reader[2],
+                                reader[3].ToString()
                             ));
                         }
                     }
@@ -86,8 +87,9 @@ namespace Team3.Models
                         {
                             notifications.Add(new Notification(
                                 (int)reader[0],
-                                (DateTime)reader[1],
-                                reader[2].ToString()
+                                (int)reader[1],
+                                (DateTime)reader[2],
+                                reader[3].ToString()
                             ));
                         }
                     }
@@ -103,7 +105,7 @@ namespace Team3.Models
 
         public int AddNotification(Notification notification)
         {
-            const string query = "INSERT INTO notifications (delivery_datetime, message) VALUES (@delivery_datetime, @message);";
+            const string query = "INSERT INTO notifications (user_id, delivery_datetime, message) VALUES (@user_id, @delivery_datetime, @message);";
 
             try
             {
@@ -111,6 +113,7 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@user_id", notification.UserId);
                     command.Parameters.AddWithValue("@delivery_datetime", notification.DeliveryDateTime);
                     command.Parameters.AddWithValue("@message", notification.Message);
 
