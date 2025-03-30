@@ -8,15 +8,29 @@ namespace Team3.Entities
 {
     public class Appointment
     {
-        public int id { get; set; }
-        public int doctorId { get; set; }
-        public int patientId { get; set; }
-        public DateTime appointmentDate { get; set; }
-        public string location { get; set; }
+
+
+        public int Id { get; set; }
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }
+        public DateTime AppointmentDateTime { get; set; }
+        public string Location { get; set; }
+
+
+        public Appointment(int id, int doctorId, int patientId, DateTime appointmentDateTime, string location)
+        {
+            Id = id;
+            DoctorId = doctorId;
+            PatientId = patientId;
+            AppointmentDateTime = appointmentDateTime;
+            Location = location;
+        }
+
+
 
         override public string ToString()
         {
-            return $"Appointment(Id: {id}, DoctorId: {doctorId}, PatientId: {patientId}, AppointmentDate: {appointmentDate}, Location: {location})";
+            return $"Appointment(Id: {Id}, DoctorId: {DoctorId}, PatientId: {PatientId}, AppointmentDate: {AppointmentDateTime}, Location: {Location})";
         }
 
     }

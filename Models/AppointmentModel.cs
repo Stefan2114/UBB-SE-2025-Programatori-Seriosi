@@ -34,8 +34,8 @@ namespace Team3.Models
 
         public void AddAppointment(Appointment appointment)
         {
-            const string query = "INSERT INTO Appointments (id, doctorId, patientId, appointmentDate, location) " +
-                                 "VALUES (@Id, @DoctorId, @PatientId, @AppointmentDate, @Location)";
+            const string query = "INSERT INTO appointments (id, doctor_id, patient_id, appointment_datetime, location) " +
+                                 "VALUES (@id, @doctor_id, @patient_id, @appointment_datetime, @location)";
 
             try
             {
@@ -44,11 +44,11 @@ namespace Team3.Models
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Id", appointment.id);
-                        command.Parameters.AddWithValue("@DoctorId", appointment.doctorId);
-                        command.Parameters.AddWithValue("@PatientId", appointment.patientId);
-                        command.Parameters.AddWithValue("@AppointmentDate", appointment.appointmentDate);
-                        command.Parameters.AddWithValue("@Location", appointment.location);
+                        command.Parameters.AddWithValue("@id", appointment.Id);
+                        command.Parameters.AddWithValue("@doctor_id", appointment.DoctorId);
+                        command.Parameters.AddWithValue("@patient_id", appointment.PatientId);
+                        command.Parameters.AddWithValue("@appointment_datetime", appointment.AppointmentDateTime);
+                        command.Parameters.AddWithValue("@location", appointment.Location);
 
                         command.ExecuteNonQuery();
                     }
@@ -62,7 +62,7 @@ namespace Team3.Models
 
         public Appointment GetAppointment(int id)
         {
-            const string query = "SELECT id, doctorId, patientId, appointmentDate, location FROM Appointments WHERE id = @Id";
+            const string query = "SELECT id, doctor_id, patient_id, appointment_datetime, location FROM Appointments WHERE id = @id";
 
             try
             {
@@ -71,21 +71,17 @@ namespace Team3.Models
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Id", id);
+                        command.Parameters.AddWithValue("@id", id);
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.Read()) // Check if data is available before accessing it
-                            {
-                                return new Appointment
-                                {
-                                    id = reader.GetInt32(reader.GetOrdinal("id")),
-                                    doctorId = reader.GetInt32(reader.GetOrdinal("doctorId")),
-                                    patientId = reader.GetInt32(reader.GetOrdinal("patientId")),
-                                    appointmentDate = reader.GetDateTime(reader.GetOrdinal("appointmentDate")),
-                                    location = reader.GetString(reader.GetOrdinal("location"))
-                                };
-                            }
+                            reader.Read();
+                            return new Appointment((int)reader[0], 
+                                (int)reader[1],
+                                (int)reader[2],
+                                (DateTime)reader[3], 
+                                reader[4].ToString());
+  
                         }
                     }
                 }
