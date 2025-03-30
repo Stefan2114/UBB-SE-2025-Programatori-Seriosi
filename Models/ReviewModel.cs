@@ -37,7 +37,7 @@ namespace Team3.Models
         
         public void addReview(Review review)
         {
-            const string query = "INSERT INTO Reviews (id, MedicalRecordId, message, nrStars) VALUES (@Id, @MedicalRecordId, @Message, @NrStars)";
+            const string query = "INSERT INTO Reviews (id, medicalrecord_id, message, nr_stars) VALUES (@id, @medicalrecord_id, @message, @nr_stars)";
 
             try
             {
@@ -47,10 +47,10 @@ namespace Team3.Models
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@Id", review.Id);
-                command.Parameters.AddWithValue("@MedicalRecordId", review.medicalRecordId);
-                command.Parameters.AddWithValue("@Message", review.Message);
-                command.Parameters.AddWithValue("@NrStars", review.NrStars);
+                command.Parameters.AddWithValue("@id", review.Id);
+                command.Parameters.AddWithValue("@medicalrecord_id", review.MedicalRecordId);
+                command.Parameters.AddWithValue("@message", review.Message);
+                command.Parameters.AddWithValue("@nr_stars", review.NrStars);
 
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -62,9 +62,9 @@ namespace Team3.Models
             }
         }
 
-        public Review getReview(int mrId)
+        public Review getReview(int medicalRecordId)
         {
-            const string query = "SELECT * FROM reviews WHERE id = @mrId;";
+            const string query = "SELECT * FROM reviews WHERE medicalrecord_id = @medicalrecord_id;";
 
             try
             {
@@ -74,20 +74,14 @@ namespace Team3.Models
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@mrId", mrId);
-
-                Review review = new Review();
+                command.Parameters.AddWithValue("@medicalrecord_id", medicalRecordId);
 
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
 
-                review.Id = reader.GetInt32(0);
-                review.medicalRecordId = reader.GetInt32(1);
-                review.Message = reader.GetString(2);
-                review.NrStars = reader.GetInt32(3);
+                return new Review(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetInt32(3));
 
-                connection.Close();
-                return review;
+
 
             }
             catch (Exception e)

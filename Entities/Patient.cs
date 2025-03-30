@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Team3.Entities
+{
+    public class Patient 
+    {
+        public int userId { get; set; }
+        public Patient(int userId)
+        {
+            this.userId = userId;
+        }
+    }
+}

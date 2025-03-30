@@ -8,10 +8,11 @@ namespace Team3.Entities
 {
     public class User
     {
+
         public int Id { get; set; }
-        public string Username { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
+
 
         public User(int id, string name, string role)
         {
@@ -20,11 +21,11 @@ namespace Team3.Entities
             Role = role;
         }
 
-
         override
         public string ToString()
         {
             return $"Id: {Id}, Name: {Name}, Role: {Role}";
         }
+
     }
 }

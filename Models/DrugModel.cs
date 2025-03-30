@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.CustomAttributes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -51,17 +52,10 @@ namespace Team3.Models
 
                 command.Parameters.AddWithValue("@mrId", Id);
 
-                Drug drug = new Drug();
-
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-
-                drug.Id = reader.GetInt32(0);
-                drug.Name = reader.GetString(1);
-                drug.Administration = reader.GetString(2);
-                connection.Close();
-                return drug;
-
+                return new Drug(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+       
             }
             catch (Exception e)
             {
