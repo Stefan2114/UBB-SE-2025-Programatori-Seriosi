@@ -2,23 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Team3.ModelViews;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Team3.ModelViews;
-using Team3.Entities;
-using System.Diagnostics;
-using System.Threading.Tasks;
+
 
 
 namespace Team3.Views
@@ -65,7 +53,7 @@ namespace Team3.Views
 
         private void NavigateToMainPage_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage)); // Navigate to ReviewView
+            //this.Frame.Navigate(typeof(MainPage)); // Navigate to ReviewView
         }
     }
 }

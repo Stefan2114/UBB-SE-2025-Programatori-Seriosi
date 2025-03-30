@@ -51,7 +51,7 @@ namespace Team3.Models
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         reader.Read();
-                        return new MedicalRecord((int)reader[0], (int)reader[1], (int)reader[2]); 
+                        return new MedicalRecord((int)reader[0], (int)reader[1], (int)reader[2], (DateTime)reader[3]); 
                     }
                 }
             }

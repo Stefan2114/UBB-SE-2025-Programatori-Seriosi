@@ -39,7 +39,7 @@ namespace Team3.Models
         public List<Message> GetMessagesByChatId(int chatId)
         {
             Console.WriteLine($"Attempting to connect to: {Config.CONNECTION}");
-            const string query = "SELECT id, content, user_id, chat_id FROM messages WHERE chat_id = @chat_id";
+            const string query = "SELECT id, content, user_id, chat_id, sent_datetime FROM messages WHERE chat_id = @chat_id";
 
             try
             {
@@ -61,7 +61,8 @@ namespace Team3.Models
                                 id: reader.GetInt32(0),
                                 content: reader.GetString(1),
                                 userId: reader.GetInt32(2),
-                                chatId: reader.GetInt32(3)
+                                chatId: reader.GetInt32(3),
+                                sentDateTime: (DateTime)reader[4]
                             ));
                         }
                     }
@@ -75,18 +76,19 @@ namespace Team3.Models
             }
         }
 
-        public void addMessage(int userId, int chatId, string content)
+        public void addMessage(Message message)
         {
-            const string query = "INSERT INTO messages (content, use_iId, chat_id) VALUES (@content, @userId, @chatId)";
+            const string query = "INSERT INTO messages (content, use_iId, chat_id, sent_datetime) VALUES (@content, @user_id, @chat_id, @sent_datetime)";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@content", content);
-                    command.Parameters.AddWithValue("@user_id", userId);
-                    command.Parameters.AddWithValue("@chat_id", chatId);
+                    command.Parameters.AddWithValue("@content", message.Content);
+                    command.Parameters.AddWithValue("@user_id", message.UserId);
+                    command.Parameters.AddWithValue("@chat_id", message.ChatId);
+                    command.Parameters.AddWithValue("@sent_datetime", message.sentDateTime);
 
                     connection.Open();
 

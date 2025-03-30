@@ -8,10 +8,10 @@ namespace Team3.Entities
 {
     public class Patient 
     {
-        public int userId { get; set; }
+        public int UserId { get; set; }
         public Patient(int userId)
         {
-            this.userId = userId;
+            this.UserId = userId;
         }
     }
 }

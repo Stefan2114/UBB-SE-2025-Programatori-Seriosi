@@ -13,12 +13,15 @@ namespace Team3.Entities
         public int UserId { get; set; }
         public int ChatId { get; set; }
 
-        public Message(int id, string content, int userId, int chatId)
+        public DateTime sentDateTime { get; set; }
+
+        public Message(int id, string content, int userId, int chatId, DateTime sentDateTime)
         {
             this.Id = id;
             this.Content = content;
             this.UserId = userId;
             this.ChatId = chatId;
+            this.sentDateTime = sentDateTime;
         }
     }
 }

@@ -37,15 +37,15 @@ namespace Team3.Models
 
         public void addTreatment(Treatment treatment)
         {
-            const string query = "INSERT INTO Treatments(id, MedicalRecordid) values (@Id , @MedicalRecordId)";
+            const string query = "INSERT INTO treatments(id, Memdicalrecord_id) values (@id , @Memdicalrecord_id)";
             try
             {
                 SqlConnection connection = new SqlConnection(Config.CONNECTION);
                 connection.Open();
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@Id", treatment.Id);
-                command.Parameters.AddWithValue("@MedicalRecordId", treatment.MedicalRecordId);
+                command.Parameters.AddWithValue("@id", treatment.Id);
+                command.Parameters.AddWithValue("@Memdicalrecord_id", treatment.MedicalRecordId);
 
                 command.ExecuteNonQuery();
                 connection.Close();
