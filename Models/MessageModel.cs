@@ -14,7 +14,6 @@ namespace Team3.Models
     {
         private static MessageModel? _instance;
         private readonly Config _config;
-        private Task<List<Message>> _messages;
         private static readonly object _lock = new object();
 
         private MessageModel()
@@ -40,14 +39,14 @@ namespace Team3.Models
         public List<Message> GetMessagesByChatId(int chatId)
         {
             Console.WriteLine($"Attempting to connect to: {Config.CONNECTION}");
-            const string query = "SELECT message_id, content, userId, chatId FROM messages WHERE chatId = @chatId";
+            const string query = "SELECT id, content, user_id, chat_id FROM messages WHERE chat_id = @chat_id";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@chatId", chatId);
+                    command.Parameters.AddWithValue("@chat_id", chatId);
                     Debug.WriteLine("the chat it is:" +  chatId);
 
                     connection.Open();
@@ -61,8 +60,8 @@ namespace Team3.Models
                             messages.Add(new Message(
                                 id: reader.GetInt32(0),
                                 content: reader.GetString(1),
-                                user_id: reader.GetInt32(2),
-                                chat_id: reader.GetInt32(3)
+                                userId: reader.GetInt32(2),
+                                chatId: reader.GetInt32(3)
                             ));
                         }
                     }
@@ -76,9 +75,9 @@ namespace Team3.Models
             }
         }
 
-        public int addMessage(int userId, int chatId, string content)
+        public void addMessage(int userId, int chatId, string content)
         {
-            const string query = "INSERT INTO messages (content, userId, chatId) OUTPUT INSERTED.message_id VALUES (@content, @userId, @chatId)";
+            const string query = "INSERT INTO messages (content, use_iId, chat_id) VALUES (@content, @userId, @chatId)";
 
             try
             {
@@ -86,15 +85,13 @@ namespace Team3.Models
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@content", content);
-                    command.Parameters.AddWithValue("@userId", userId);
-                    command.Parameters.AddWithValue("@chatId", chatId);
+                    command.Parameters.AddWithValue("@user_id", userId);
+                    command.Parameters.AddWithValue("@chat_id", chatId);
 
                     connection.Open();
 
-                    int newMessageId = (int)command.ExecuteScalar(); // Get the newly inserted message_id
+                    command.ExecuteNonQuery();
 
-                    Debug.WriteLine($"New message inserted with ID: {newMessageId}");
-                    return newMessageId;
                 }
             }
             catch (Exception e)

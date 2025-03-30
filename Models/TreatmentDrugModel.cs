@@ -34,9 +34,9 @@ namespace Team3.Models
             }
         }
 
-        public List<TreatmentDrug> getTreatmentDrugs(int mrId)
+        public List<TreatmentDrug> getTreatmentDrugs(int medicalrecordId)
         {
-            const string query = "SELECT * FROM TreatmentDrugs WHERE TreatmentId = @mrID";
+            const string query = "SELECT * FROM TreatmentDrugs WHERE medicalrecord_id = @medicalrecord_id";
 
             try
             {
@@ -46,7 +46,7 @@ namespace Team3.Models
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@mrId", mrId);
+                command.Parameters.AddWithValue("@medicalrecord_id", medicalrecordId);
 
                 List<TreatmentDrug> TreatmentDrugList = new List<TreatmentDrug>();
 
@@ -54,16 +54,12 @@ namespace Team3.Models
 
                 while (reader.Read())
                 {
-                    TreatmentDrug treatmentdrug = new TreatmentDrug();
-                    treatmentdrug.Id = reader.GetInt32(0);
-                    treatmentdrug.TreatmentId = reader.GetInt32(1);
-                    treatmentdrug.DrugId = reader.GetInt32(2);
-                    treatmentdrug.Quantity = reader.GetDouble(3);
-                    treatmentdrug.StartTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4));
-                    treatmentdrug.EndTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(5));
-                    treatmentdrug.StartDate = DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(6));
-                    treatmentdrug.NrDays = reader.GetInt32(7);
-                    TreatmentDrugList.Add(treatmentdrug);
+                    TreatmentDrugList.Add(new TreatmentDrug(reader.GetInt32(0), reader.GetInt32(1),
+                        reader.GetInt32(2), reader.GetDouble(3), 
+                        TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4)),
+                        TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(5)),
+                        DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(6)),
+                        reader.GetInt32(7)));
                 }
 
                 connection.Close();
@@ -76,5 +72,7 @@ namespace Team3.Models
             }
 
         }
+
+
     }
 }
