@@ -11,6 +11,7 @@
     <None Update="Package.appxmanifest">
       <SubType>Designer</SubType>
     </None>
+
     <Page Update="Views\MessageView.xaml">
       <SubType>Designer</SubType>
     </Page>
