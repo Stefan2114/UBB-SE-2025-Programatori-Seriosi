@@ -9,12 +9,15 @@ namespace Team3.Entities
     public class Notification
     {
         public int Id { get; set; }
+
+        public int UserId { get; set; }
         public DateTime DeliveryDateTime { get; set; }
         public string Message { get; set; }
 
-        public Notification(int id, DateTime deliveryDateTime, string message)
+        public Notification(int id, int userId, DateTime deliveryDateTime, string message)
         {
             Id = id;
+            UserId = userId;
             DeliveryDateTime = deliveryDateTime;
             Message = message;
         }
