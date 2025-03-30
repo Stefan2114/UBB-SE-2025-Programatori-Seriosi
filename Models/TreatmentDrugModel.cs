@@ -34,6 +34,36 @@ namespace Team3.Models
             }
         }
 
+        public void addTreatmentDrug(TreatmentDrug treatmentDrug)
+        {
+            const string query = "INSERT INTO TreatmentDrugs(Id,TreatmentId,DrugId,Quantity,StartTime,EndTime,StartDate,NrDays) VALUES (@Id,@TreatmentId,@DrugId,@Quantity,@StartTime,@EndTime,@StartDate,@NrDays)";
+            try
+            {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@Id", treatmentDrug.Id);
+                command.Parameters.AddWithValue("@TreatmentId", treatmentDrug.TreatmentId);
+                command.Parameters.AddWithValue("@DrugId", treatmentDrug.DrugId);
+                command.Parameters.AddWithValue("@Quantity", treatmentDrug.Quantity);
+                command.Parameters.AddWithValue("@Quantity", treatmentDrug.Quantity);
+                command.Parameters.AddWithValue("@StartTime", treatmentDrug.StartTime);
+                command.Parameters.AddWithValue("@EndTime", treatmentDrug.EndTime);
+                command.Parameters.AddWithValue("@StartDate", treatmentDrug.StartDate);
+                command.Parameters.AddWithValue("@NrDays", treatmentDrug.NrDays);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error adding treatmentdrug", e);
+            }
+        }
+
         public List<TreatmentDrug> getTreatmentDrugs(int mrId)
         {
             const string query = "SELECT * FROM TreatmentDrugs WHERE TreatmentId = @mrID";
