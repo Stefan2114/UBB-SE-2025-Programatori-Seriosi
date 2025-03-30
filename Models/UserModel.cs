@@ -65,6 +65,38 @@ namespace Team3.Models
 
             return notifications;
         }
+
+
+        public User GetUser(int id)
+        {
+            const string query = "SELECT (*) FROM users WHERE id = @id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new User((int)reader[0], reader[1].ToString(), reader[2].ToString());
+                            }
+                        }
+                    }
+                }
+
+                throw new Exception("Doctor not found");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving doctor", e);
+            }
+        }
     }
 
 

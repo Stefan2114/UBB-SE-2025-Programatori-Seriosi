@@ -22,6 +22,13 @@ namespace Team3.Entities
             Message = message;
         }
 
+        public Notification(int userId, DateTime deliveryDateTime, string message)
+        {
+            UserId = userId;
+            DeliveryDateTime = deliveryDateTime;
+            Message = message;
+        }
+
         public override string ToString()
         {
             return $"[Notification] ID: {Id}, Delivery: {DeliveryDateTime}, Message: {Message}";

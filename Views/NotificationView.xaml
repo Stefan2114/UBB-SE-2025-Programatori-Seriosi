@@ -10,8 +10,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
         <!-- Back Button at top left -->
         <Button x:Name="BackButton" 
                 Content="Back" 
@@ -19,9 +19,6 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="0,0,0,20"/>
-
-
-
         <!-- Notifications List -->
         <ListView x:Name="NotificationsListView" 
                   Grid.Row="2"
@@ -40,14 +37,11 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
-
                         <TextBlock Text="{Binding Message}" 
                                    Grid.Row="0" 
                                    Grid.Column="1"
                                    TextTrimming="CharacterEllipsis"
                                    MaxLines="1"/>
-
                         <TextBlock Text="{Binding DeliveryDateTime}" 
                                    Grid.Row="1" 
                                    Grid.Column="1"
@@ -57,5 +51,43 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Bottom Buttons Row -->
+        <Grid Grid.Row="3" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="AddAppointmentButton" 
+                    Content="Add Appointment" 
+                    Click="AddAppointmentButton_Click"
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,5,0"/>
+
+            <Button x:Name="DeleteAppointmentButton" 
+                    Content="Delete Appointment" 
+                    Click="DeleteAppointmentButton_Click"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    Margin="5,0,5,0"/>
+
+            <Button x:Name="AddTreatmentButton" 
+                    Content="Add Treatment" 
+                    Click="AddTreatmentButton_Click"
+                    Grid.Column="2"
+                    HorizontalAlignment="Stretch"
+                    Margin="5,0,5,0"/>
+
+            <Button x:Name="AddReviewButton" 
+                    Content="Add Review" 
+                    Click="AddReviewButton_Click"
+                    Grid.Column="3"
+                    HorizontalAlignment="Stretch"
+                    Margin="5,0,0,0"/>
+        </Grid>
     </Grid>
 </Page>

@@ -45,5 +45,30 @@ namespace Team3.Views
                 Frame.Navigate(typeof(NotificationDetailView), selectedNotification);
             }
         }
+
+        private void AddAppointmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            ModelView.AddAppointment(UserId);
+        }
+
+
+        private void DeleteAppointmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            ModelView.DeleteAppointment(UserId);
+        }
+
+
+        private void AddTreatmentButton(object sender, RoutedEventArgs e)
+        {
+            ModelView.AddTreatment(UserId);
+        }
+
+
+        private void AddReviewButton(object sender, RoutedEventArgs e)
+        {
+            ModelView.AddReview(UserId);
+        }
+
+
     }
 }
