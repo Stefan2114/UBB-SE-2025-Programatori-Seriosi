@@ -41,7 +41,7 @@ namespace Team3.Views
         private void sendButtonClicked(object sender, RoutedEventArgs e)
         {
             string message = messageBar.Text;
-            //ViewModel.sendButtonHandler(message);
+            ViewModel.sendButtonHandler(message);
             messageBar.PlaceholderText = "Type a message...";
         }
     }

@@ -76,7 +76,7 @@ namespace Team3.Models
             }
         }
 
-        public void addMessage(Message message)
+        public int addMessage(Message message)
         {
             const string query = "INSERT INTO messages (content, use_iId, chat_id, sent_datetime) VALUES (@content, @user_id, @chat_id, @sent_datetime)";
 
@@ -92,7 +92,7 @@ namespace Team3.Models
 
                     connection.Open();
 
-                    command.ExecuteNonQuery();
+                    return Convert.ToInt32(command.ExecuteScalar());
 
                 }
             }
