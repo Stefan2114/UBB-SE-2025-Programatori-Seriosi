@@ -9,14 +9,11 @@ namespace Team3.Entities
     public class Equipment
     {
         public int EquipmentId { get; set; }
-        public string EquipmentName { get; set; }
-        public string EquipmentModel { get; set; }
 
-        public Equipment(int equipmentId, string equipmentName, string equipmentModel)
+
+        public Equipment(int equipmentId)
         {
             this.EquipmentId = equipmentId;
-            this.EquipmentName = equipmentName;
-            this.EquipmentModel = equipmentModel;
         }
     }
 }

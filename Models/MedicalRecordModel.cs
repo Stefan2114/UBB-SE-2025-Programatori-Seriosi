@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-
 using Team3.Entities;
 
 namespace Team3.Models
 {
-    public class UserModel
+    public class MedicalRecordModel
     {
-
-        private static UserModel? _instance;
+        private static MedicalRecordModel? _instance;
         private readonly Config _config;
         private static readonly object _lock = new object();
-        private UserModel()
+
+        private MedicalRecordModel()
         {
             _config = Config.Instance;
         }
 
-        public static UserModel Instance
+        public static MedicalRecordModel Instance
         {
             get
             {
@@ -25,18 +24,21 @@ namespace Team3.Models
                 {
                     if (_instance == null)
                     {
-                        _instance = new UserModel();
-                    }   
+                        _instance = new MedicalRecordModel();
+                    }
+                    return _instance;
                 }
-                return _instance;
-            }   
+            }
         }
 
 
-        public List<User> GetUsers()
+
+
+        // maybe we don't need this
+        
+        public MedicalRecord GetMedicalRecord(int id)
         {
-            const string query = "SELECT * FROM users;";
-            List<User> notifications = new List<User>();
+            const string query = "SELECT * FROM MedicalRecords WHERE id = @id;";
 
             try
             {
@@ -44,28 +46,20 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@id", id);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
-                        {
-                            notifications.Add(new User(
-                                (int)reader[0],
-                                reader[1].ToString(),
-                                reader[2].ToString()
-                            ));
-                        }
+                        reader.Read();
+                        return new MedicalRecord((int)reader[0], (int)reader[1], (int)reader[2], (DateTime)reader[3]); 
                     }
                 }
             }
             catch (Exception e)
             {
-                throw new Exception("Error retrieving notifications", e);
+                throw new Exception("Error retrieving medical record", e);
             }
 
-            return notifications;
         }
     }
-
-
 }

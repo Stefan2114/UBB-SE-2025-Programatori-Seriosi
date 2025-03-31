@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Data.SqlClient;
 using Team3.Entities;
 
 namespace Team3.Models
 {
-    public class EquipmentModel
+    public class PatientModel
     {
-        private static EquipmentModel? _instance;
+        private static PatientModel? _instance;
         private static readonly object _lock = new object();
         private readonly Config _config;
-
-        private EquipmentModel()
-        {
+        private PatientModel() {
             _config = Config.Instance;
         }
 
-        public static EquipmentModel Instance
+        public static PatientModel Instance
         {
             get
             {
@@ -26,7 +23,7 @@ namespace Team3.Models
                     {
                         if (_instance == null)
                         {
-                            _instance = new EquipmentModel();
+                            _instance = new PatientModel();
                         }
                     }
                 }
@@ -34,40 +31,36 @@ namespace Team3.Models
             }
         }
 
-        
-        // Get all equipment
-        public List<Equipment> GetEquipments()
+        public Patient GetPatient(int userId)
         {
-            const string query = "SELECT EquipmentId, Name, Description FROM Equipment";
+            const string query = "SELECT user_id FROM Patients WHERE user_id = @UserId";
 
             try
             {
-                List<Equipment> equipmentList = new List<Equipment>();
-
                 using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
+                        command.Parameters.AddWithValue("@UserId", userId);
+
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read()) // Check if data is available before accessing it
                             {
-                                equipmentList.Add(new Equipment(
-                                    reader.GetInt32(reader.GetOrdinal("EquipmentId")),
-                                    reader.GetString(reader.GetOrdinal("Name")),
-                                    reader.GetString(reader.GetOrdinal("Description"))
-                                ));
+                                return new Patient(
+                                    reader.GetInt32(reader.GetOrdinal("user_id"))
+                                );
                             }
                         }
                     }
                 }
 
-                return equipmentList;
+                throw new Exception("Patient not found");
             }
             catch (Exception e)
             {
-                throw new Exception("Error retrieving equipments", e);
+                throw new Exception("Error retrieving patient", e);
             }
         }
     }
