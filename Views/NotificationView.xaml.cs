@@ -58,13 +58,13 @@ namespace Team3.Views
         }
 
 
-        private void AddTreatmentButton(object sender, RoutedEventArgs e)
+        private void AddTreatmentButton_Click(object sender, RoutedEventArgs e)
         {
             ModelView.AddTreatment(UserId);
         }
 
 
-        private void AddReviewButton(object sender, RoutedEventArgs e)
+        private void AddReviewButton_Click(object sender, RoutedEventArgs e)
         {
             ModelView.AddReview(UserId);
         }

@@ -87,12 +87,12 @@ namespace Team3.ModelViews
 
         public void AddTreatment(int userId)
         {
-            _notificationModel.deleteNotification(notificationId);
+            //_notificationModel.deleteNotification(notificationId);
         }
 
         public void AddReview(int userId)
         {
-            _notificationModel.deleteNotification(notificationId);
+            //_notificationModel.deleteNotification(notificationId);
         }
     }
 }
