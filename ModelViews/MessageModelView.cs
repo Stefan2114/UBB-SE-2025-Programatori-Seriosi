@@ -10,21 +10,23 @@ using System.Threading.Tasks;
 using Team3.Entities;
 using Team3.Models;
 using Windows.Services.Maps;
+using Team3.DTOs;
 
 namespace Team3.ModelViews
 {
     public class MessageModelView
     {
         private readonly MessageModel messageModel;
+        private readonly UserModelView userModelView;
         private int chatId;
         private int userId;
-        public ObservableCollection<String> Messages { get; set; }
+        public ObservableCollection<MessageChatDTO> Messages { get; set; }
 
         public MessageModelView()
         {
             Debug.WriteLine("MessageModelView created");
             messageModel = MessageModel.Instance;
-            Messages = new ObservableCollection<String>();
+            Messages = new ObservableCollection<MessageChatDTO>();
         }
 
         //public Dictionary<string, Message> getMessagesByChatId(int chatId)
@@ -79,11 +81,13 @@ namespace Team3.ModelViews
             Debug.WriteLine("Back button clicked");
         }
 
-        public void sendButtonHandler()
+        public void sendButtonHandler(string msg)
         {
             Debug.WriteLine("Send button clicked");
-            string message = ""; // get it from a text field
-            //Messages.Add(new Message(messageID, message, _userId, chat_id));
+            string message = msg;
+            DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
+            Message newMessage = new Message(message, userId, chatId, currentDateTime);
+            MessageChatDTO messageChatDTO = new MessageChatDTO(newMessage.Id ,message, userId, chatId, currentDateTime, userModelView.getUserNameById(userId));
         }
     }
 }
