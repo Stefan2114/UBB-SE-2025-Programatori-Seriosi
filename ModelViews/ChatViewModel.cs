@@ -7,18 +7,19 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Team3.Entities;
 using Team3.Models;
+using Team3.DTOs;
 
 namespace Team3.ModelViews
 {
     internal class ChatViewModel
     {
         public int userID { get; set; }
-        public ObservableCollection<Chat> Chats { get; private set; }
+        public ObservableCollection<ChatDTO> Chats { get; private set; }
         private readonly UserModelView UserMV;
 
         public ChatViewModel()
         {
-            Chats = new ObservableCollection<Chat>();
+            Chats = new ObservableCollection<ChatDTO>();
             UserMV = new UserModelView();
         }
 
@@ -28,7 +29,9 @@ namespace Team3.ModelViews
             Debug.WriteLine(chats.Count + "chats loaded in VM");
             foreach (Chat chat in chats)
             {
-                Chats.Add(chat);
+                User user1 = UserModelView.GetUser(chat.user1);
+                User user2 = UserModelView.GetUser(chat.user2);
+                Chats.Add(new ChatDTO(chat.ChatID, chat.user1, chat.user2, user1.Name, user2.Name);
             }
 
         }
