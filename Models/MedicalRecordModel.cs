@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+
 using Team3.Entities;
 
 namespace Team3.Models
@@ -9,6 +10,7 @@ namespace Team3.Models
     {
         private static MedicalRecordModel? _instance;
         private readonly Config _config;
+
         private static readonly object _lock = new object();
 
         private MedicalRecordModel()
@@ -20,6 +22,7 @@ namespace Team3.Models
         {
             get
             {
+
                 lock (_lock)
                 {
                     if (_instance == null)
@@ -46,6 +49,7 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
+
                     command.Parameters.AddWithValue("@id", id);
 
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -57,6 +61,7 @@ namespace Team3.Models
             }
             catch (Exception e)
             {
+
                 throw new Exception("Error retrieving medical record", e);
             }
 

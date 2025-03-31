@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+
 using Team3.Views;
 
 namespace Team3
@@ -9,6 +10,7 @@ namespace Team3
         public MainWindow()
         {
             this.InitializeComponent();
+
             this.ExtendsContentIntoTitleBar = false;
 
 

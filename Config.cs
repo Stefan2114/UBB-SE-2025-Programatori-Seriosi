@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Team3
 {
     public class Config
     {
+
         public static readonly string CONNECTION = "Server=vm;Database=team3;Integrated Security=True;";
         public static readonly TimeZoneInfo ROMANIA_TIMEZONE;
 
@@ -31,6 +33,7 @@ namespace Team3
                 if (_instance == null)
                 {
 
+
                     lock (_lock)
                     {
                         if (_instance == null)
@@ -41,6 +44,7 @@ namespace Team3
                 }
                 return _instance;
             }
+
 
         }
 

@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +13,7 @@ namespace Team3.Models
     public class DoctorModel
     {
         private static DoctorModel? _instance;
+
         private static readonly object _lock = new object();
         private readonly Config _config;
 
@@ -26,6 +28,7 @@ namespace Team3.Models
             {
                 if (_instance == null)
                 {
+
                     lock (_lock)
                     {
                         if (_instance == null)
@@ -38,6 +41,7 @@ namespace Team3.Models
             }
         }
 
+
         public Doctor GetDoctor(int id)
         {
             const string query = "SELECT * FROM doctors WHERE id = @id";
@@ -47,6 +51,7 @@ namespace Team3.Models
                 using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 {
                     connection.Open();
+
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@id", id);
