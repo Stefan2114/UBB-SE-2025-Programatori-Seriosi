@@ -10,16 +10,18 @@ namespace Team3.ModelViews
     using System.Text;
     using System.Threading.Tasks;
     using Team3.Models;
-    class NotificationModelView
+    class NotificationViewModel
     {
         private readonly NotificationModel _notificaitonModel;
         public ObservableCollection<Notification> notifications { get; private set; }
-
-        public NotificationModelView()
+        public int UserId { get; set; }
+        public NotificationViewModel(int userId)
         {
+            
             _notificaitonModel = NotificationModel.Instance;
             notifications = new ObservableCollection<Notification>();
             LoadNotificaitons();
+            userId = UserId;
         }
 
         private void LoadNotificaitons()
@@ -47,6 +49,34 @@ namespace Team3.ModelViews
                 Debug.WriteLine(ex.Message);
             }
         }
+
+        public void AddNotification(Notification notification)
+        {
+            try
+            {
+                _notificaitonModel.AddNotification(notification);
+                notifications.Add(notification);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }   
+
+        public void DeleteNotification(Notification notification)
+        {
+            try
+            {
+                _notificaitonModel.DeleteNotification(notification.Id);
+                notifications.Remove(notification);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+
     }
 
 

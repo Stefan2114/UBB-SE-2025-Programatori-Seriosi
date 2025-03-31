@@ -86,5 +86,24 @@ namespace Team3.Models
                 throw new Exception("Error adding notification", e);
             }
         }
+
+        public void DeleteNotification(int id)
+        {
+            const string query = "DELETE FROM Notifications WHERE Id = @Id;";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error deleting notification", e);
+            }
+        }   
     }
 }
