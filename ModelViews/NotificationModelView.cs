@@ -80,9 +80,17 @@ namespace Team3.ModelViews
             _notificationModel.AddAppointmentNotification(notificationId, appointmentId);
         }
 
+
+        public void AddCancelAppointmentNotification(int appointmentId)
+        {
+            AppointmentNotification appointmentNotification = _notificationModel.GetNotificationAppointmentByAppointmentId(appointmentId);
+        }
+
+        //private void deleteUpcomingAppointmentNotification(int appo)
+
         public void DeleteAppointment(int userId)
         {
-            _notificationModel.deleteNotification(userId);
+            //DeleteAppointmentNotification
         }
 
         public void AddTreatment(int userId)
