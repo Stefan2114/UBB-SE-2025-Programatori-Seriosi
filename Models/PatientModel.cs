@@ -1,39 +1,29 @@
-
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Team3.Entities;
 
 namespace Team3.Models
 {
-    public class DoctorModel
+    public class PatientModel
     {
-        private static DoctorModel? _instance;
-
+        private static PatientModel? _instance;
         private static readonly object _lock = new object();
         private readonly Config _config;
-
-        private DoctorModel() {
+        private PatientModel() {
             _config = Config.Instance;
         }
 
-
-        public static DoctorModel Instance
+        public static PatientModel Instance
         {
             get
             {
                 if (_instance == null)
                 {
-
                     lock (_lock)
                     {
                         if (_instance == null)
                         {
-                            _instance = new DoctorModel();
+                            _instance = new PatientModel();
                         }
                     }
                 }
@@ -41,36 +31,36 @@ namespace Team3.Models
             }
         }
 
-
-        public Doctor GetDoctor(int id)
+        public Patient GetPatient(int userId)
         {
-            const string query = "SELECT * FROM doctors WHERE id = @id";
+            const string query = "SELECT user_id FROM Patients WHERE user_id = @UserId";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 {
                     connection.Open();
-
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@id", id);
+                        command.Parameters.AddWithValue("@UserId", userId);
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.Read())
+                            if (reader.Read()) // Check if data is available before accessing it
                             {
-                                return new Doctor((int)reader[0], (int)reader[1]);
+                                return new Patient(
+                                    reader.GetInt32(reader.GetOrdinal("user_id"))
+                                );
                             }
                         }
                     }
                 }
 
-                throw new Exception("Doctor not found");
+                throw new Exception("Patient not found");
             }
             catch (Exception e)
             {
-                throw new Exception("Error retrieving doctor", e);
+                throw new Exception("Error retrieving patient", e);
             }
         }
     }
