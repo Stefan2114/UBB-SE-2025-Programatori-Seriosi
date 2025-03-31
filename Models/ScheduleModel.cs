@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Team3.Domain;
+using Team3.Entities;
 
 namespace Team3.Models
 {

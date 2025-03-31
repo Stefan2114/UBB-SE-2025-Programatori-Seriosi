@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Team3.Domain
+namespace Team3.Entities
 {
     public class Department
     {
@@ -12,8 +12,8 @@ namespace Team3.Domain
         public string DepartmentName { get; set; }
         public Department(int departmentId, string departmentName)
     {
-        this.DepartmentId = departmentId;
-        this.DepartmentName = departmentName;
+        DepartmentId = departmentId;
+        DepartmentName = departmentName;
     }
 
     }

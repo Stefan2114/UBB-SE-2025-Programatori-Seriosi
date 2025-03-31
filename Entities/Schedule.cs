@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Team3.Domain
+namespace Team3.Entities
 {
     public class Schedule
     {
@@ -17,10 +17,10 @@ namespace Team3.Domain
 
         public Schedule(int scheduleId, DateOnly scheduleWorkDay, int doctorId,int shifTypeId)
         {
-            this.ScheduleId = scheduleId;
-            this.ScheduleWorkDay = scheduleWorkDay;
-            this.DoctorId = doctorId;
-            this.ShiftTypeId = shifTypeId;
+            ScheduleId = scheduleId;
+            ScheduleWorkDay = scheduleWorkDay;
+            DoctorId = doctorId;
+            ShiftTypeId = shifTypeId;
         }
 
     }

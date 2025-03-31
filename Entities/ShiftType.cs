@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Team3.Domain
+namespace Team3.Entities
 {
    public class ShiftType
     {
@@ -14,9 +14,9 @@ namespace Team3.Domain
 
         public ShiftType(int shiftTypeId, TimeOnly shiftTypeStartTime, TimeOnly shiftTypeEndTime)
         {
-            this.ShiftTypeId = shiftTypeId;
-            this.ShiftTypeStartTime = shiftTypeStartTime;
-            this.ShiftTypeEndTime = shiftTypeEndTime;
+            ShiftTypeId = shiftTypeId;
+            ShiftTypeStartTime = shiftTypeStartTime;
+            ShiftTypeEndTime = shiftTypeEndTime;
         }
 
     }
