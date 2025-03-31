@@ -8,7 +8,7 @@ namespace Team3
 {
     public class Config
     {
-        public static readonly string CONNECTION = "Server=vm;Database=team3;Integrated Security=True;";
+        public static readonly string CONNECTION = "Data Source=Bogdan;Initial Catalog=Team3;Integrated Security=True;Encrypt=False;";
 
         private static Config? _instance;
         private static readonly object _lock = new object();

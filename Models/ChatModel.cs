@@ -53,7 +53,7 @@ namespace Team3.Models
                 {
                     while (reader.Read())
                     {
-                        chats.Add(new Chat((int)reader[0], (int)reader[1], (int)reader[2]);
+                        chats.Add(new Chat((int)reader[0], (int)reader[1], (int)reader[2]));
                     }
                 }
 
@@ -65,6 +65,25 @@ namespace Team3.Models
             catch (Exception e)
             {
                 throw new Exception("Error getting chats", e);
+            }
+        }
+
+        public void addChat(int user1, int user2)
+        {
+            const string query = "INSERT INTO chats (user1, user2) VALUES (@user1, @user2)";
+            try
+            {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@user1", user1);
+                command.Parameters.AddWithValue("@user2", user2);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error adding chat", e);
             }
         }
     }
