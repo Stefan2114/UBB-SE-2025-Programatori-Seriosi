@@ -9,6 +9,7 @@
     <None Update="Package.appxmanifest">
       <SubType>Designer</SubType>
     </None>
+
     <Page Update="Views\NotificationDetailView.xaml">
       <SubType>Designer</SubType>
     </Page>
