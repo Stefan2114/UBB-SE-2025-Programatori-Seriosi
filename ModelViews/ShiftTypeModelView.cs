@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using Team3.Domain;
+using Team3.Entities;
 using Team3.Models;
 
 namespace Team3.ModelViews

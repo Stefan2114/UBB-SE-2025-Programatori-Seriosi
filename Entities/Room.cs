@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Team3.Domain
+namespace Team3.Entities
 {
     public class Room
     {
@@ -13,8 +13,8 @@ namespace Team3.Domain
 
         public Room(int id, int departmentId)
         {
-            this.Id = id;
-            this.DepartmentId = departmentId;
+            Id = id;
+            DepartmentId = departmentId;
         }
     }
 

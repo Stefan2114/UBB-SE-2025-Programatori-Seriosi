@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Team3.Domain;
+using Team3.Entities;
 using Team3.Models;
 
 namespace Team3.ModelViews
@@ -27,29 +27,29 @@ namespace Team3.ModelViews
             Doctors = new ObservableCollection<Doctor>();
 
             // Load doctors from database
-            LoadDoctors();
+            //LoadDoctors();
         }
 
-        private void LoadDoctors()
-        {
-            try
-            {
-                var doctorsList = doctorModel.GetDoctors();
+        //private void LoadDoctors()
+        //{
+        //    try
+        //    {
+        //        var doctorsList = doctorModel.GetDoctors();
 
-                // Clear existing data
-                Doctors.Clear();
-                DoctorsInfo.Clear();
+        //        // Clear existing data
+        //        Doctors.Clear();
+        //        DoctorsInfo.Clear();
 
-                foreach (var doctor in doctorsList)
-                {
-                    Doctors.Add(doctor);
-                    DoctorsInfo.Add(doctor);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading doctors: {ex.Message}");
-            }
-        }
+        //        foreach (var doctor in doctorsList)
+        //        {
+        //            Doctors.Add(doctor);
+        //            DoctorsInfo.Add(doctor);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error loading doctors: {ex.Message}");
+        //    }
+        //}
     }
 }
