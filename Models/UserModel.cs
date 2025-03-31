@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Team3.Entities;
 
 namespace Team3.Models
@@ -28,7 +25,7 @@ namespace Team3.Models
                 {
                     if (_instance == null)
                     {
-                        _instance = new DrugModel();
+                        _instance = new UserModel();
                     }   
                 }
                 return _instance;
@@ -39,33 +36,66 @@ namespace Team3.Models
         public List<User> GetUsers()
         {
             const string query = "SELECT * FROM users;";
+            List<User> notifications = new List<User>();
 
             try
             {
-                SqlConnection connection = new SqlConnection(Config.CONNECTION);
-
-                connection.Open();
-              
-                SqlCommand command = new SqlCommand(query, connection);
-                List<User> users = new List<User>();
-
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        users.Add(new User((int)reader[0], reader[1].ToString(), reader[2].ToString()));
+                        while (reader.Read())
+                        {
+                            notifications.Add(new User(
+                                (int)reader[0],
+                                reader[1].ToString(),
+                                reader[2].ToString()
+                            ));
+                        }
                     }
                 }
-
-                connection.Close();
-
-                return users;
             }
             catch (Exception e)
             {
-                throw new Exception("Error getting users", e);
+                throw new Exception("Error retrieving notifications", e);
             }
 
+            return notifications;
+        }
+
+
+        public User GetUser(int id)
+        {
+            const string query = "SELECT (*) FROM users WHERE id = @id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new User((int)reader[0], reader[1].ToString(), reader[2].ToString());
+                            }
+                        }
+                    }
+                }
+
+                throw new Exception("Doctor not found");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving doctor", e);
+            }
         }
     }
 

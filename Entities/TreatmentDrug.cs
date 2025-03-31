@@ -29,9 +29,6 @@ namespace Team3.Entities
             this.NrDays = nrDays;
         }
 
-        public TreatmentDrug()
-        {
-        }
 
         override
         public string ToString()

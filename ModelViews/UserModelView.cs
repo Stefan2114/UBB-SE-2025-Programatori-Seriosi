@@ -8,17 +8,19 @@ namespace Team3.ModelViews
     using Team3.Entities;
     using Team3.Models;
 
-    public class UsersViewModel
+    public class UserModelView
     {
         private readonly UserModel _userModel;
         public ObservableCollection<User> Users { get; private set; }
 
-        public UsersViewModel()
+
+        public UserModelView()
         {
             _userModel = UserModel.Instance;
             Users = new ObservableCollection<User>();
             LoadUsers();
         }
+
 
         private void LoadUsers()
         {

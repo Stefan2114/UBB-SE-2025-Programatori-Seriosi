@@ -1,30 +1,29 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 
-
-public class Treatment { }
-public class Review { } // mock for code purposes
 
 
 public class MedicalRecord
 {
     public int Id { get; set; }
+    public int DoctorId { get; set; }
     public int PatientId { get; set; }
 
-    public int DoctorId { get; set; }
+    public DateTime MedicalRecordDateTime { get; set; }
 
-    public List<Treatment> Treatments { get; set; } = new List<Treatment>();
-    public List<Review> Reviews { get; set; } = new List<Review>();
 
-    public MedicalRecord(int id, int patientId, int doctorId)
+
+    public MedicalRecord(int id, int doctorId, int patientId, DateTime medicalRecordDateTime)
     {
         Id = id;
-        PatientId = patientId;
         DoctorId = doctorId;
+        PatientId = patientId;
+        MedicalRecordDateTime = medicalRecordDateTime;
     }
 
     public override string ToString()
     {
-        return $"[MedicalRecord] ID: {Id}, Patient ID: {PatientId}, Doctor ID : {DoctorId}";
+        return $"[MedicalRecord] ID: {Id},Doctor ID : {DoctorId}, Patient ID: {PatientId}, ";
     }
 }

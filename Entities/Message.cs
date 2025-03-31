@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace Team3.Entities
 {
-    class Message
+    public class Message
     {
-        public int id { get; set; }
-        public string content { get; set; }
-        public int user_id { get; set; }
-        public int chat_id { get; set; }
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public int UserId { get; set; }
+        public int ChatId { get; set; }
 
-        public Message(int id, string content, int user_id, int chat_id)
+        public DateTime sentDateTime { get; set; }
+
+        public Message(int id, string content, int userId, int chatId, DateTime sentDateTime)
         {
-            this.id = id;
-            this.content = content;
-            this.user_id = user_id;
-            this.chat_id = chat_id;
+            this.Id = id;
+            this.Content = content;
+            this.UserId = userId;
+            this.ChatId = chatId;
+            this.sentDateTime = sentDateTime;
         }
     }
 }

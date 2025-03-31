@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+
 using Team3.Entities;
 
 namespace Team3.Models
@@ -9,6 +10,7 @@ namespace Team3.Models
     {
         private static MedicalRecordModel? _instance;
         private readonly Config _config;
+
         private static readonly object _lock = new object();
 
         private MedicalRecordModel()
@@ -20,6 +22,7 @@ namespace Team3.Models
         {
             get
             {
+
                 lock (_lock)
                 {
                     if (_instance == null)
@@ -31,31 +34,14 @@ namespace Team3.Models
             }
         }
 
-        public void AddMedicalRecord(MedicalRecord medicalRecord)
-        {
-            const string query = "INSERT INTO MedicalRecords (Id, PatientId, DoctorId) VALUES (@Id, @PatientId, @DoctorId);";
 
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
-                {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Id", medicalRecord.Id);
-                    command.Parameters.AddWithValue("@PatientId", medicalRecord.PatientId);
-                    command.Parameters.AddWithValue("@DoctorId", medicalRecord.DoctorId);
-                    command.ExecuteNonQuery();
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Error adding medical record", e);
-            }
-        }
 
+
+        // maybe we don't need this
+        
         public MedicalRecord GetMedicalRecord(int id)
         {
-            const string query = "SELECT * FROM MedicalRecords WHERE Id = @Id;";
+            const string query = "SELECT * FROM MedicalRecords WHERE id = @id;";
 
             try
             {
@@ -63,23 +49,22 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Id", id);
+
+                    command.Parameters.AddWithValue("@id", id);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        if (reader.Read())
-                        {
-                            return new MedicalRecord((int)reader["Id"], (int)reader["PatientId"], (int)reader["DoctorId"]); //
-                        }
+                        reader.Read();
+                        return new MedicalRecord((int)reader[0], (int)reader[1], (int)reader[2], (DateTime)reader[3]); 
                     }
                 }
             }
             catch (Exception e)
             {
+
                 throw new Exception("Error retrieving medical record", e);
             }
 
-            return null;
         }
     }
 }

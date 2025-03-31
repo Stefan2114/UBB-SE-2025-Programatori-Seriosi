@@ -48,9 +48,10 @@ namespace Team3.Models
                         while (reader.Read())
                         {
                             notifications.Add(new Notification(
-                                (int)reader["Id"],
-                                (DateTime)reader["DeliveryDateTime"],
-                                reader["Message"].ToString()
+                                (int)reader[0],
+                                (int)reader[1],
+                                (DateTime)reader[2],
+                                reader[3].ToString()
                             ));
                         }
                     }
@@ -64,9 +65,12 @@ namespace Team3.Models
             return notifications;
         }
 
-        public void AddNotification(Notification notification)
+
+
+        public List<Notification> GetUserNotifications(int userId)
         {
-            const string query = "INSERT INTO Notifications (Id, DeliveryDateTime, Message) VALUES (@Id, @DeliveryDateTime, @Message);";
+            const string query = "SELECT * FROM Notifications WHERE user_id = @user_id;";
+            List<Notification> notifications = new List<Notification>();
 
             try
             {
@@ -74,11 +78,46 @@ namespace Team3.Models
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Id", notification.Id);
-                    command.Parameters.AddWithValue("@DeliveryDateTime", notification.DeliveryDateTime);
-                    command.Parameters.AddWithValue("@Message", notification.Message);
+                    command.Parameters.AddWithValue("@user_id", userId);
 
-                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            notifications.Add(new Notification(
+                                (int)reader[0],
+                                (int)reader[1],
+                                (DateTime)reader[2],
+                                reader[3].ToString()
+                            ));
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving notifications", e);
+            }
+
+            return notifications;
+        }
+
+        public int AddNotification(Notification notification)
+        {
+            const string query = "INSERT INTO notifications (user_id, delivery_datetime, message) VALUES (@user_id, @delivery_datetime, @message);";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@user_id", notification.UserId);
+                    command.Parameters.AddWithValue("@delivery_datetime", notification.DeliveryDateTime);
+                    command.Parameters.AddWithValue("@message", notification.Message);
+
+                    return Convert.ToInt32(command.ExecuteScalar());
                 }
             }
             catch (Exception e)
@@ -86,5 +125,72 @@ namespace Team3.Models
                 throw new Exception("Error adding notification", e);
             }
         }
+
+
+        public void AddAppointmentNotification(int notificationId, int appointmentId)
+        {
+            const string query = "INSERT INTO appointment_notifications (notification_id, appointment_id) VALUES (@notification_id, @appointment_id);";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@notification_id", notificationId);
+                    command.Parameters.AddWithValue("@appointment_id", appointmentId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error adding appointment notification", e);
+            }
+        }
+
+
+
+        public void deleteNotification(int id)
+        {
+            const string query = "DELETE FROM notifications WHERE id = @id;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error adding appointment notification", e);
+            }
+        }
+
+
+        public void deleteAllNotifications()
+        {
+            const string query = "DELETE FROM notifications";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error adding appointment notification", e);
+            }
+        }
+
+
     }
 }

@@ -19,9 +19,6 @@ namespace Team3.Entities
             this.Administration = administration;
         }
 
-        public Drug()
-        {
-        }
 
         override
         public string ToString()

@@ -34,9 +34,38 @@ namespace Team3.Models
             }
         }
 
-        public List<TreatmentDrug> getTreatmentDrugs(int mrId)
+        public void addTreatmentDrug(TreatmentDrug treatmentDrug)
         {
-            const string query = "SELECT * FROM TreatmentDrugs WHERE TreatmentId = @mrID";
+            const string query = "INSERT INTO TreatmentDrugs(id,treatment_id,drug_id,quantity,starttime,endtime,startdate,nrdays) VALUES (@id,@treatment_id,@drug_id,@quantity,@starttime,@endtime,@startdate,@nrdays)";
+            try
+            {
+                SqlConnection connection = new SqlConnection(Config.CONNECTION);
+
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@id", treatmentDrug.Id);
+                command.Parameters.AddWithValue("@treatment_id", treatmentDrug.TreatmentId);
+                command.Parameters.AddWithValue("@drug_id", treatmentDrug.DrugId);
+                command.Parameters.AddWithValue("@quantity", treatmentDrug.Quantity);
+                command.Parameters.AddWithValue("@starttime", treatmentDrug.StartTime);
+                command.Parameters.AddWithValue("@endtime", treatmentDrug.EndTime);
+                command.Parameters.AddWithValue("@startdate", treatmentDrug.StartDate);
+                command.Parameters.AddWithValue("@nrdays", treatmentDrug.NrDays);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error adding treatmentdrug", e);
+            }
+        }
+
+        public List<TreatmentDrug> getTreatmentDrugs(int medicalrecordId)
+        {
+            const string query = "SELECT * FROM TreatmentDrugs WHERE medicalrecord_id = @medicalrecord_id";
 
             try
             {
@@ -46,7 +75,7 @@ namespace Team3.Models
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@mrId", mrId);
+                command.Parameters.AddWithValue("@medicalrecord_id", medicalrecordId);
 
                 List<TreatmentDrug> TreatmentDrugList = new List<TreatmentDrug>();
 
@@ -54,16 +83,12 @@ namespace Team3.Models
 
                 while (reader.Read())
                 {
-                    TreatmentDrug treatmentdrug = new TreatmentDrug();
-                    treatmentdrug.Id = reader.GetInt32(0);
-                    treatmentdrug.TreatmentId = reader.GetInt32(1);
-                    treatmentdrug.DrugId = reader.GetInt32(2);
-                    treatmentdrug.Quantity = reader.GetDouble(3);
-                    treatmentdrug.StartTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4));
-                    treatmentdrug.EndTime = TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(5));
-                    treatmentdrug.StartDate = DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(6));
-                    treatmentdrug.NrDays = reader.GetInt32(7);
-                    TreatmentDrugList.Add(treatmentdrug);
+                    TreatmentDrugList.Add(new TreatmentDrug(reader.GetInt32(0), reader.GetInt32(1),
+                        reader.GetInt32(2), reader.GetDouble(3), 
+                        TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4)),
+                        TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(5)),
+                        DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(6)),
+                        reader.GetInt32(7)));
                 }
 
                 connection.Close();
@@ -76,5 +101,7 @@ namespace Team3.Models
             }
 
         }
+
+
     }
 }
