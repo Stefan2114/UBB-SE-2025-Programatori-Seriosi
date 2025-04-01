@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using Team3.Entities;
 using Team3.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Team3.ModelViews
 {
@@ -15,16 +17,67 @@ namespace Team3.ModelViews
         private readonly NotificationModel _notificationModel;
         private readonly AppointmentModel _appointmentModel;
         private readonly DoctorModel _doctorModel;
-        private readonly UserModel _userModel;
+        private readonly UserModelView _userModelView;
+        private readonly PatientModel _patientModel;
 
-        private readonly static string UPCOMING_APPOINTMENT_NOTIFICATION_TEMPLATE = "You have an appointment tommrow at @date with @doctor at location @location";
-        private readonly static string APPOINTMENT_CANCEL_NOTIFICATION_TEMPLATE = "The appointent that was scheduled for @date with @doctor at location @location was canceled";
+        private readonly static string UPCOMING_APPOINTMENT_NOTIFICATION_TEMPLATE = "Tomorrow @datetime, you have an appointment with Dr. @doctor at location @location";
+        private readonly static string APPOINTMENT_CANCEL_NOTIFICATION_TEMPLATE = "Patient: @patient has canceled their upcoming appointment, scheduled for @datetime at @location.";
         private readonly static string REVIEW_NOTIFICATION_TEMPLATE = "A review for doctor @doctor was added: @message; number of starts: @nrStarts";
-        private readonly static string MEDICATION_REMINDER_NOTIFICATION_TEMPLATE = "Reminder to take @drug with quantity: @quantity. @administration";
+        private readonly static string MEDICATION_REMINDER_NOTIFICATION_TEMPLATE = "It's time to take @drug, Quantity: @quantity, @administration";
+        private readonly static string REVIEW_REMINDER_NOTIFICATION_TEMPLATE = "Reminder: Please leave a review for your last appointment.";
 
 
 
+        private string GetUpcomingAppointmentNotificationMessage(string datetime, string doctorName, string location)
+        {
+            string notificationMessage = UPCOMING_APPOINTMENT_NOTIFICATION_TEMPLATE;
+            notificationMessage = notificationMessage.Replace("@datetime", datetime);
+            notificationMessage = notificationMessage.Replace("@doctor", doctorName);
+            notificationMessage = notificationMessage.Replace("@location", location);
+            return notificationMessage;
 
+        }
+
+
+        private string GetAppointmentCancelNotificationMessage(string patientName, string datetime, string location)
+        {
+            string notificationMessage = APPOINTMENT_CANCEL_NOTIFICATION_TEMPLATE;
+            notificationMessage = notificationMessage.Replace("@patient", patientName);
+            notificationMessage = notificationMessage.Replace("@datetime", datetime);
+            notificationMessage = notificationMessage.Replace("@location", location);
+            return notificationMessage;
+        }
+
+
+        private string GetReviewNotificationMessage(string doctorName, string message, int @nrStarts)
+        {
+            string notificationMessage = REVIEW_NOTIFICATION_TEMPLATE;
+            notificationMessage = notificationMessage.Replace("@doctor", doctorName);
+            notificationMessage = notificationMessage.Replace("@message", message);
+            notificationMessage = notificationMessage.Replace("@nrStarts", nrStarts.ToString());
+            return notificationMessage;
+
+        }
+
+
+
+        private string GetMedicationReminderNotificationMessage(string drugName, double quantity, string administration)
+        {
+            string notificationMessage = MEDICATION_REMINDER_NOTIFICATION_TEMPLATE;
+            notificationMessage = notificationMessage.Replace("@drug", drugName);
+            notificationMessage = notificationMessage.Replace("@quantity", quantity.ToString());
+            notificationMessage = notificationMessage.Replace("@administration", administration);
+            return notificationMessage;
+
+        }
+
+
+        private string GetReviewReminderNotificationMessage(string drugName, double quantity, string administration)
+        {
+            string notificationMessage = REVIEW_REMINDER_NOTIFICATION_TEMPLATE;
+            return notificationMessage;
+
+        }
 
         public List<Notification> Notifications { get; private set; }
 
@@ -32,6 +85,9 @@ namespace Team3.ModelViews
         {
             _notificationModel = NotificationModel.Instance;
             _appointmentModel = AppointmentModel.Instance;
+            _doctorModel = DoctorModel.Instance;
+            _patientModel = PatientModel.Instance;
+            _userModelView = new UserModelView();
             Notifications = new List<Notification>();
         }
 
@@ -41,6 +97,7 @@ namespace Team3.ModelViews
             DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
 
             List<Notification> notifications = _notificationModel.GetUserNotifications(userId);
+            Debug.WriteLine(notifications.ToString());
             notifications = notifications
                 .Where(n => n.DeliveryDateTime < currentDateTime)
                 .OrderByDescending(n => n.DeliveryDateTime)
@@ -61,7 +118,7 @@ namespace Team3.ModelViews
         {
             DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
 
-            Appointment appointment = new Appointment(4, 1, userId, currentDateTime.AddDays(1), "FSEGA");
+            Appointment appointment = new Appointment(4, 1, 1, currentDateTime.AddDays(1), "FSEGA");
 
             _appointmentModel.AddAppointment(appointment);
             AddUpcomingAppointmentNotification(4);
@@ -71,14 +128,29 @@ namespace Team3.ModelViews
 
         public void AddUpcomingAppointmentNotification(int appointmentId)
         {
+
             Appointment appointment = _appointmentModel.GetAppointment(appointmentId);
             Doctor doctor = _doctorModel.GetDoctor(appointment.DoctorId);
-            User user = _userModel.GetUser(doctor.UserId);
+            User user = _userModelView.GetUser(doctor.UserId);
 
-            string upcomingAppointmentNotificationMessage = UPCOMING_APPOINTMENT_NOTIFICATION_TEMPLATE.Replace("@date", appointment.AppointmentDateTime.ToString());
-            int notificationId = _notificationModel.AddNotification(new Notification(user.Id,appointment.AppointmentDateTime.AddDays(-1), upcomingAppointmentNotificationMessage));
+            Patient patient = _patientModel.GetPatient(appointment.PatientId);
+
+            Debug.WriteLine(appointment.ToString());
+            Debug.WriteLine(doctor.ToString());
+            Debug.WriteLine(user.ToString());
+
+            string upcomingAppointmentNotificationMessage = GetUpcomingAppointmentNotificationMessage(appointment.AppointmentDateTime.ToString(), user.Name, appointment.Location);
+            int notificationId = _notificationModel.AddNotification(new Notification(patient.UserId,appointment.AppointmentDateTime.AddDays(-1), upcomingAppointmentNotificationMessage));
+
+            Debug.WriteLine(appointment.ToString());
+            Debug.WriteLine(doctor.ToString());
+            Debug.WriteLine(user.ToString());
+            Debug.WriteLine(notificationId.ToString());
+
             _notificationModel.AddAppointmentNotification(notificationId, appointmentId);
         }
+
+
 
 
         public void AddCancelAppointmentNotification(int appointmentId)
