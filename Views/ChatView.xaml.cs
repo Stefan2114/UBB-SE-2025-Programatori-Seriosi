@@ -83,7 +83,7 @@ namespace Team3.Views
                 Debug.WriteLine($"Selected Chat: ID={selectedChat.ChatID}, User1={selectedChat.user1}, User2={selectedChat.user2}");
                 var messagePage = new MessageView();
                 //messagePage.SelectedChat = selectedChat;
-                Frame.Navigate(typeof(MessageView), selectedChat);
+                Frame.Navigate(typeof(MessageView), selectedChat.ChatID);
             }
         }
     }
