@@ -2,6 +2,7 @@
 
 namespace Team3.ModelViews
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
@@ -46,6 +47,12 @@ namespace Team3.ModelViews
                 Debug.WriteLine(ex.Message);
             }
 
+        }
+
+
+        public List<User> GetUsers()
+        {
+            return this._userModel.GetUsers();
         }
 
 
