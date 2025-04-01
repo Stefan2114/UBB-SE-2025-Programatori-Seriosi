@@ -28,7 +28,7 @@ namespace Team3.Views
                 int medicarecordId = int.Parse(txtMedicalrecordId.Text);
              
 
-                _treatmentModelView.addTreatmentButtonHandler(id, medicarecordId);
+                //_treatmentModelView.addTreatmentButtonHandler(id, medicarecordId);
 
                 await ShowDialog("Treatment added successfully!", "Success");
             }

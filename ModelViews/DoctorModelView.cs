@@ -9,7 +9,6 @@ namespace Team3.ModelViews
     {
         // Observable collections for doctors' information
         public ObservableCollection<Doctor> DoctorsInfo { get; set; }
-        public ObservableCollection<Doctor> Doctors { get; set; }
 
         // Dependencies
         private readonly DoctorModel doctorModel;
@@ -24,32 +23,16 @@ namespace Team3.ModelViews
 
             // Initialize collections
             DoctorsInfo = new ObservableCollection<Doctor>();
-            Doctors = new ObservableCollection<Doctor>();
 
             // Load doctors from database
             //LoadDoctors();
         }
 
-        //private void LoadDoctors()
-        //{
-        //    try
-        //    {
-        //        var doctorsList = doctorModel.GetDoctors();
 
-        //        // Clear existing data
-        //        Doctors.Clear();
-        //        DoctorsInfo.Clear();
+        public Doctor GetDoctor(int doctorId)
+        {
+            return this.doctorModel.GetDoctor(doctorId);
+        }
 
-        //        foreach (var doctor in doctorsList)
-        //        {
-        //            Doctors.Add(doctor);
-        //            DoctorsInfo.Add(doctor);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error loading doctors: {ex.Message}");
-        //    }
-        //}
     }
 }

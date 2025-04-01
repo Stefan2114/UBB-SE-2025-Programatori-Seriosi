@@ -19,16 +19,10 @@ namespace Team3.ModelViews
             _treatmentModel = TreatmentModel.Instance;
         }
 
-        public void addTreatment(Treatment treatment)
+        public Treatment GetTreatmentByMedicalRecordId(int mrId)
         {
-            _treatmentModel.addTreatment(treatment);
+            return this._treatmentModel.GetTreatmentByMedicalRecordId(mrId);
         }
-        public void addTreatmentButtonHandler(int id, int medicalrecordId)
-        {
-            Debug.WriteLine("Add button clicked");
-            Treatment newTreatment = new Treatment(id, medicalrecordId);    
-            
-            addTreatment(newTreatment);
-        }
+
     }
 }

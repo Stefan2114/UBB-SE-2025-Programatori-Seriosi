@@ -36,7 +36,7 @@ namespace Team3.Models
 
         public void addTreatmentDrug(TreatmentDrug treatmentDrug)
         {
-            const string query = "INSERT INTO TreatmentDrugs(id,treatment_id,drug_id,quantity,starttime,endtime,startdate,nrdays) VALUES (@id,@treatment_id,@drug_id,@quantity,@starttime,@endtime,@startdate,@nrdays)";
+            const string query = "INSERT INTO treatments_drugs(id,treatment_id,drug_id,quantity,starttime,endtime,startdate,nrdays) VALUES (@id,@treatment_id,@drug_id,@quantity,@starttime,@endtime,@startdate,@nrdays)";
             try
             {
                 SqlConnection connection = new SqlConnection(Config.CONNECTION);
@@ -63,9 +63,9 @@ namespace Team3.Models
             }
         }
 
-        public List<TreatmentDrug> getTreatmentDrugs(int medicalrecordId)
+        public List<TreatmentDrug> getTreatmentDrugs(int treatmentId)
         {
-            const string query = "SELECT * FROM TreatmentDrugs WHERE medicalrecord_id = @medicalrecord_id";
+            const string query = "SELECT * FROM treatments_drugs WHERE treatment_id = @treatment_id";
 
             try
             {
@@ -75,7 +75,7 @@ namespace Team3.Models
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.AddWithValue("@medicalrecord_id", medicalrecordId);
+                command.Parameters.AddWithValue("@treatment_id", treatmentId);
 
                 List<TreatmentDrug> TreatmentDrugList = new List<TreatmentDrug>();
 
@@ -84,7 +84,7 @@ namespace Team3.Models
                 while (reader.Read())
                 {
                     TreatmentDrugList.Add(new TreatmentDrug(reader.GetInt32(0), reader.GetInt32(1),
-                        reader.GetInt32(2), reader.GetDouble(3), 
+                        reader.GetInt32(2), Convert.ToDouble((decimal)reader[3]), 
                         TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(4)),
                         TimeOnly.FromTimeSpan(reader.GetFieldValue<TimeSpan>(5)),
                         DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(6)),

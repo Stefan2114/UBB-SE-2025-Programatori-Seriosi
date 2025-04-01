@@ -15,10 +15,15 @@ namespace Team3.ModelViews
     {
 
         private readonly NotificationModel _notificationModel;
-        private readonly AppointmentModel _appointmentModel;
-        private readonly DoctorModel _doctorModel;
+        private readonly AppointmentModelView _appointmentModelView;
+        private readonly DoctorModelView _doctorModelView;
         private readonly UserModelView _userModelView;
-        private readonly PatientModel _patientModel;
+        private readonly PatientModelView _patientModelView;
+        private readonly MedicalRecordModelView _medicalRecordModelView;
+        private readonly TreatmentModelView _treatmentModelView;
+        private readonly TreatmentDrugModelView treatmentDrugModelView;
+        private readonly DrugModelView drugModelView;
+
 
         private readonly static string UPCOMING_APPOINTMENT_NOTIFICATION_TEMPLATE = "Tomorrow @datetime, you have an appointment with Dr. @doctor at location @location";
         private readonly static string APPOINTMENT_CANCEL_NOTIFICATION_TEMPLATE = "Patient: @patient has canceled their upcoming appointment, scheduled for @datetime at @location.";
@@ -29,6 +34,9 @@ namespace Team3.ModelViews
         private readonly static int HARDCODED_DOCTOR_ID = 1;
         private readonly static int HARDCODED_PATIENT_ID = 1;
         private readonly static int HARDCODED_APPOINTMENT_ID = 4;
+
+        private readonly static int HARDCODED_MEDICALRECORD_ID = 1;
+
 
 
 
@@ -89,11 +97,16 @@ namespace Team3.ModelViews
         public NotificationModelView()
         {
             _notificationModel = NotificationModel.Instance;
-            _appointmentModel = AppointmentModel.Instance;
-            _doctorModel = DoctorModel.Instance;
-            _patientModel = PatientModel.Instance;
+            _appointmentModelView = new AppointmentModelView(); ;
+            _doctorModelView = new DoctorModelView();
+            _patientModelView = new PatientModelView();
             _userModelView = new UserModelView();
             Notifications = new List<Notification>();
+            _medicalRecordModelView = new MedicalRecordModelView();
+            _treatmentModelView = new TreatmentModelView();
+            treatmentDrugModelView = new TreatmentDrugModelView();
+            drugModelView = new DrugModelView();
+
         }
 
         public void LoadNotifications(int userId)
@@ -125,7 +138,7 @@ namespace Team3.ModelViews
 
             Appointment appointment = new Appointment(HARDCODED_APPOINTMENT_ID, HARDCODED_DOCTOR_ID, HARDCODED_PATIENT_ID, currentDateTime.AddDays(1), "FSEGA");
 
-            _appointmentModel.AddAppointment(appointment);
+            _appointmentModelView.AddAppointment(appointment);
             AddUpcomingAppointmentNotification(HARDCODED_APPOINTMENT_ID);
 
         }
@@ -134,11 +147,11 @@ namespace Team3.ModelViews
         public void AddUpcomingAppointmentNotification(int appointmentId)
         {
 
-            Appointment appointment = _appointmentModel.GetAppointment(appointmentId);
-            Doctor doctor = _doctorModel.GetDoctor(appointment.DoctorId);
+            Appointment appointment = _appointmentModelView.GetAppointment(appointmentId);
+            Doctor doctor = _doctorModelView.GetDoctor(appointment.DoctorId);
             User user = _userModelView.GetUser(doctor.UserId);
 
-            Patient patient = _patientModel.GetPatient(appointment.PatientId);
+            Patient patient = _patientModelView.GetPatient(appointment.PatientId);
 
             Debug.WriteLine(appointment.ToString());
             Debug.WriteLine(doctor.ToString());
@@ -160,11 +173,11 @@ namespace Team3.ModelViews
 
         public void AddCancelAppointmentNotification(int appointmentId)
         {
-            Appointment appointment = _appointmentModel.GetAppointment(appointmentId);
+            Appointment appointment = _appointmentModelView.GetAppointment(appointmentId);
             Debug.WriteLine(appointment.ToString());
-            Doctor doctor = _doctorModel.GetDoctor(appointment.DoctorId);
+            Doctor doctor = _doctorModelView.GetDoctor(appointment.DoctorId);
 
-            Patient patient = _patientModel.GetPatient(appointment.PatientId);
+            Patient patient = _patientModelView.GetPatient(appointment.PatientId);
             User user = _userModelView.GetUser(patient.UserId);
 
 
@@ -185,10 +198,53 @@ namespace Team3.ModelViews
 
         public void DeleteUpcomingAppointmentNotification(int appointmentId)
         {
-            Appointment appointment = _appointmentModel.GetAppointment(appointmentId);
+            Appointment appointment = _appointmentModelView.GetAppointment(appointmentId);
 
             AppointmentNotification appointmentNotification = _notificationModel.GetNotificationAppointmentByAppointmentId(appointmentId);
             _notificationModel.deleteNotification(appointmentNotification.NotificationId);
+        }
+
+
+        public void AddMedicationReminderNotifications(int medicalRecordId)
+        {
+            MedicalRecord medicalRecord =this._medicalRecordModelView.GetMedicalRecord(medicalRecordId);
+
+            Debug.WriteLine(medicalRecord.ToString());
+
+            Patient patient = this._patientModelView.GetPatient(medicalRecord.PatientId);
+
+            Treatment treatment = this._treatmentModelView.GetTreatmentByMedicalRecordId(medicalRecordId);
+            List<TreatmentDrug> treatmentDrugs = this.treatmentDrugModelView.getTreatmentDrugsByTreatmentId(treatment.Id);
+
+
+            foreach(TreatmentDrug treatmentDrug in treatmentDrugs){
+                Drug drug = this.drugModelView.getDrug(treatmentDrug.DrugId);
+                TimeSpan interval;
+                if (treatmentDrug.Quantity == 1)
+                {
+                    interval = TimeSpan.Zero; // If only 1 dose, no need for intervals
+                }
+                else
+                {
+                    interval = (treatmentDrug.EndTime - treatmentDrug.StartTime) / (treatmentDrug.Quantity - 1);
+                }
+                Console.WriteLine($"Take the drug at the following times:");
+
+                for (int i = 0; i < treatmentDrug.Quantity; i++)
+                {
+                    TimeSpan doseTime = treatmentDrug.StartTime.ToTimeSpan() + (interval * i);
+                    string notificationMessage = GetMedicationReminderNotificationMessage(drug.Name, treatmentDrug.Quantity, drug.Administration);
+                    DateOnly medicalRecordDate = DateOnly.FromDateTime(medicalRecord.MedicalRecordDateTime);
+                    for (int j = 1; j <= treatmentDrug.NrDays; j++)
+                    {
+                        DateOnly newDate = medicalRecordDate.AddDays(j);
+                        DateTime dateTimeOfMedication = newDate.ToDateTime(TimeOnly.FromTimeSpan(doseTime));
+                        Notification notification = new Notification(patient.UserId, dateTimeOfMedication, notificationMessage);
+                        this._notificationModel.AddNotification(notification);
+                    }
+                }
+            }
+
         }
 
         //private void deleteUpcomingAppointmentNotification(int appo)
@@ -202,7 +258,7 @@ namespace Team3.ModelViews
 
         public void AddTreatment(int userId)
         {
-            //_notificationModel.deleteNotification(notificationId);
+            AddMedicationReminderNotifications(HARDCODED_MEDICALRECORD_ID);
         }
 
         public void AddReview(int userId)

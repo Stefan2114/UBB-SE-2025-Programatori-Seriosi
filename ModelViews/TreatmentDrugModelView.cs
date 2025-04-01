@@ -19,9 +19,9 @@ namespace Team3.ModelViews
             _treatmentdrugModel = TreatmentDrugModel.Instance;
         }
 
-        public List<TreatmentDrug> getTreatmentDrugs(int mrId)
+        public List<TreatmentDrug> getTreatmentDrugsByTreatmentId(int treatmentId)
         {
-            return _treatmentdrugModel.getTreatmentDrugs(mrId);
+            return _treatmentdrugModel.getTreatmentDrugs(treatmentId);
         }
     }
 }

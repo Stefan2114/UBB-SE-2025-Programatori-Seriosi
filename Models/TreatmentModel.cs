@@ -35,9 +35,9 @@ namespace Team3.Models
             }
         }
 
-        public void addTreatment(Treatment treatment)
+        public void AddTreatment(Treatment treatment)
         {
-            const string query = "INSERT INTO treatments(id, Memdicalrecord_id) values (@id , @Memdicalrecord_id)";
+            const string query = "INSERT INTO treatments(id, memdicalrecord_id) values (@id , @memdicalrecord_id)";
             try
             {
                 SqlConnection connection = new SqlConnection(Config.CONNECTION);
@@ -45,7 +45,7 @@ namespace Team3.Models
                 SqlCommand command = new SqlCommand(query, connection);
 
                 command.Parameters.AddWithValue("@id", treatment.Id);
-                command.Parameters.AddWithValue("@Memdicalrecord_id", treatment.MedicalRecordId);
+                command.Parameters.AddWithValue("@memdicalrecord_id", treatment.MedicalRecordId);
 
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -55,6 +55,40 @@ namespace Team3.Models
                 throw new Exception("Error adding treatment", e);
             }
         }
+
+
+        public Treatment GetTreatmentByMedicalRecordId(int mrId)
+        {
+            const string query = "SELECT * FROM treatments WHERE medicalrecord_id = @medicalrecord_id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@medicalrecord_id", mrId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new Treatment((int)reader[0], (int)reader[1]);
+                            }
+                        }
+                    }
+                }
+
+                throw new Exception("Treatment not found");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving treatment", e);
+            }
+        }
+
 
     }
 }
