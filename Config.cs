@@ -9,7 +9,7 @@ namespace Team3
 {
     public class Config
     {
-        public static readonly string CONNECTION = "Server=PAUL;Database=team3;Integrated Security=True;";
+        public static readonly string CONNECTION = "Server=PAUL;Database=Team3;Integrated Security=True";
         public static readonly TimeZoneInfo ROMANIA_TIMEZONE;
 
         private static Config? _instance;
