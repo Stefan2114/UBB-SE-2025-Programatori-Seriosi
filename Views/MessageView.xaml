@@ -60,6 +60,5 @@
             <TextBox x:Name="messageBar" PlaceholderText="Type a message..." Grid.Column="0" VerticalAlignment="Stretch"/>
             <Button x:Name="sendButton" Content="Send" Width="80" Margin="10,0,0,0" Click="sendButtonClicked" Grid.Column="1"/>
         </Grid>
-
     </Grid>
 </Page>
