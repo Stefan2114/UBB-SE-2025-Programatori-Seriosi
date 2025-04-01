@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using Team3.Entities;
 using Team3.Models;
-//Mi a trebuit mie clasa si am creato eu cu gpt dar nu e taskul meu sherdy
+
 
 namespace Team3.ModelViews
 {

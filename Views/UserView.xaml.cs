@@ -51,7 +51,7 @@ namespace Team3.Views
         private void AuditButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to AuditPage and pass the selected user
-            //Frame.Navigate(typeof(AuditView), SelectedUser);
+            Frame.Navigate(typeof(AuditOptionPage));
         }
     }
 }

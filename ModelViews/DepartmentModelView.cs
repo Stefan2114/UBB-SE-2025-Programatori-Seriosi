@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Team3.DTOs;
 using Team3.Entities;
 using Team3.Models;
+using Team3.DTOs;
 
 namespace Team3.ModelViews
 {
@@ -99,5 +102,41 @@ namespace Team3.ModelViews
                 Debug.WriteLine($"Error handling back button: {ex.Message}");
             }
         }
-    }
+
+
+        /* public async Task<List<DepartmentDTO>> GetDepartmentDetailsAsync()
+         {
+             try
+             {
+                 // Simulate an asynchronous operation
+                 await Task.Delay(1000);
+
+                 var departmentList = _departmentModel.GetDepartments();
+                 var departmentDTOs = new List<DepartmentDTO>();
+
+                 foreach (var department in departmentList)
+                 {
+                     departmentDTOs.Add(new DepartmentDTO
+                     {
+                         Name = department.DepartmentName,
+                         DoctorCount = department.DoctorCount,
+                         EquipmentCount = department.EquipmentCount,
+                         RoomCount = department.RoomCount,
+                         InterneeCount = department.InterneeCount
+                     });
+                 }
+
+                 return departmentDTOs;
+             }
+             catch (Exception ex)
+             {
+                 Debug.WriteLine($"Error getting department details: {ex.Message}");
+                 throw;
+             }
+
+        }
+        */
+
+
+}
 }
