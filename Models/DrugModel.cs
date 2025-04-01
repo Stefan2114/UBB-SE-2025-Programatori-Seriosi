@@ -38,7 +38,7 @@ namespace Team3.Models
 
         public Drug getDrug(int Id)
         {
-            const string query = "SELECT * FROM Drugs WHERE id = @id;";
+            const string query = "SELECT * FROM drugs WHERE id = @id;";
 
             try
             {
@@ -50,7 +50,7 @@ namespace Team3.Models
                 SqlCommand command = new SqlCommand(query, connection);
 
 
-                command.Parameters.AddWithValue("@mrId", Id);
+                command.Parameters.AddWithValue("@id", Id);
 
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();

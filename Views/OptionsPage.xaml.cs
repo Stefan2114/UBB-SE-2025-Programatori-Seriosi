@@ -24,7 +24,7 @@ namespace Team3.Views
     /// </summary>
     public sealed partial class OptionsPage : Page
     {
-        public User SelectedUser { get; set; }
+        public int SelectedUserId { get; set; }
 
         public OptionsPage()
         {
@@ -35,9 +35,9 @@ namespace Team3.Views
         {
             base.OnNavigatedTo(e);
 
-            if (e.Parameter is User user)
+            if (e.Parameter is int user)
             {
-                SelectedUser = user;
+                SelectedUserId = user;
                 // Now you can use the selected user in this page
             }
         }
@@ -60,7 +60,7 @@ namespace Team3.Views
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to NotificationsPage and pass the selected user
-            Frame.Navigate(typeof(NotificationView), SelectedUser.Id);
+            Frame.Navigate(typeof(NotificationView), SelectedUserId);
         }
 
     }

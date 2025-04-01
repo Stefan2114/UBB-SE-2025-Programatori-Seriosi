@@ -103,9 +103,42 @@ namespace Team3.Models
             return notifications;
         }
 
+
+
+        public AppointmentNotification GetNotificationAppointmentByAppointmentId(int appointmentId)
+        {
+            const string query = "SELECT * FROM appointment_notifications WHERE appointment_id = @appointment_id";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@appointment_id", appointmentId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new AppointmentNotification((int)reader[0], (int)reader[1], (int)reader[2]);
+                            }
+                        }
+                    }
+                }
+
+                throw new Exception("Doctor not found");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving notification appointment", e);
+            }
+        }
+
         public int AddNotification(Notification notification)
         {
-            const string query = "INSERT INTO notifications (user_id, delivery_datetime, message) VALUES (@user_id, @delivery_datetime, @message);";
+            const string query = "INSERT INTO notifications (user_id, delivery_datetime, message) VALUES (@user_id, @delivery_datetime, @message); SELECT SCOPE_IDENTITY();";
 
             try
             {

@@ -69,7 +69,7 @@ namespace Team3.Models
 
         public User GetUser(int id)
         {
-            const string query = "SELECT (*) FROM users WHERE id = @id";
+            const string query = "SELECT * FROM users WHERE id = @id";
 
             try
             {
@@ -90,7 +90,7 @@ namespace Team3.Models
                     }
                 }
 
-                throw new Exception("Doctor not found");
+                throw new Exception("User not found");
             }
             catch (Exception e)
             {

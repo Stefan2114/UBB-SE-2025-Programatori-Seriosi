@@ -16,6 +16,12 @@ namespace Team3.ModelViews
             _medicalRecordModel = MedicalRecordModel.Instance;
         }
 
+
+        public MedicalRecord GetMedicalRecord(int id)
+        {
+            return this._medicalRecordModel.GetMedicalRecord(id);
+        }
+
         // Metodă pentru obținerea fișelor medicale pe baza doctorului și intervalului de timp
         //public List<MedicalRecord> GetMedicalRecordsByDoctorID(int doctorId, DateOnly startDate, DateOnly endDate)
         //{

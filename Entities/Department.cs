@@ -11,12 +11,12 @@ namespace Team3.Entities
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public Department(int departmentId, string departmentName)
-    {
-        DepartmentId = departmentId;
-        DepartmentName = departmentName;
-    }
+        {
+            DepartmentId = departmentId;
+            DepartmentName = departmentName;
+        }
 
     }
 
-   
+
 }

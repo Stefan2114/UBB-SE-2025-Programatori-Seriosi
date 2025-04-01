@@ -5,11 +5,12 @@
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
-
     <None Update="Package.appxmanifest">
       <SubType>Designer</SubType>
     </None>
-
+    <Page Update="Views\MessageView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\NotificationDetailView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -20,9 +21,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UserView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\MessageView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

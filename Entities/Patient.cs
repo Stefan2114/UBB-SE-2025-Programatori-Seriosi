@@ -8,9 +8,12 @@ namespace Team3.Entities
 {
     public class Patient 
     {
+
+        public int Id { get; set; }
         public int UserId { get; set; }
-        public Patient(int userId)
+        public Patient(int id, int userId)
         {
+            this.Id = id;
             this.UserId = userId;
         }
     }
