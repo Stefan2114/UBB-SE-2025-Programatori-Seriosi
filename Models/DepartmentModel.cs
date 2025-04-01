@@ -29,7 +29,7 @@ namespace Team3.Models
 
         public List<Department> GetDepartments()
         {
-            const string query = "SELECT DepartmentId, DepartmentName FROM Department;";
+            const string query = "SELECT * FROM departments;";
 
             try
             {

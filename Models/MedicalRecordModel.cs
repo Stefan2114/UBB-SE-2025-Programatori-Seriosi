@@ -41,7 +41,7 @@ namespace Team3.Models
         
         public MedicalRecord GetMedicalRecord(int id)
         {
-            const string query = "SELECT * FROM MedicalRecords WHERE id = @id;";
+            const string query = "SELECT * FROM medicalrecords WHERE id = @id;";
 
             try
             {
