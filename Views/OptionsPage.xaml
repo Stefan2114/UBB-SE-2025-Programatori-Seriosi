@@ -19,18 +19,7 @@
                 VerticalAlignment="Top"
                 Margin="0,0,0,20"/>
 
-        <!-- User information display -->
-        <StackPanel Grid.Row="0" 
-                    Margin="0,60,0,0">
-            <TextBlock Text="Selected User:" 
-                       FontWeight="SemiBold" 
-                       Margin="0,0,0,5"/>
-            <TextBlock x:Name="UserInfoText" 
-                       Text="{x:Bind SelectedUser.Name, Mode=OneWay}" 
-                       FontSize="18" 
-                       FontWeight="Bold"
-                       Margin="0,0,0,20"/>
-        </StackPanel>
+
 
         <!-- Navigation Buttons in the middle -->
         <StackPanel Grid.Row="1" 

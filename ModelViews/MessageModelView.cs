@@ -87,7 +87,7 @@ namespace Team3.ModelViews
             string message = msg;
             DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
             Message newMessage = new Message(message, userId, chatId, currentDateTime);
-            MessageChatDTO messageChatDTO = new MessageChatDTO(newMessage.Id ,message, userId, chatId, currentDateTime, userModelView.getUserNameById(userId));
+            MessageChatDTO messageChatDTO = new MessageChatDTO(newMessage.Id ,message, userId, chatId, currentDateTime, userModelView.GetUser(userId).ToString());
         }
     }
 }

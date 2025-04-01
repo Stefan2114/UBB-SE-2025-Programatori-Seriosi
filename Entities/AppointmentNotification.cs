@@ -7,19 +7,22 @@ using System.Threading.Tasks;
 public class AppointmentNotification
 {
     public int Id { get; set; }
-    public int AppointmentId { get; set; }
+
     public int NotificationId { get; set; }
+    public int AppointmentId { get; set; }
 
 
-   public AppointmentNotification(int id, int appointmentId, int notificationId)
+
+   public AppointmentNotification(int id, int notificationId, int appointmentId)
     {
         Id = id;
-        AppointmentId = appointmentId;
         NotificationId = notificationId;
+        AppointmentId = appointmentId;
+
     }
 
     public override string ToString()
     {
-        return $"[AppointmentNotification] ID: {Id}, Appointment ID: {AppointmentId}, Notification ID: {NotificationId}";
+        return $"[AppointmentNotification] ID: {Id}, Notification ID: {NotificationId}, Appointment ID: {AppointmentId}";
     }
 }

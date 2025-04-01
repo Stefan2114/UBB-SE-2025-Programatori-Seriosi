@@ -31,9 +31,43 @@ namespace Team3.Models
             }
         }
 
-        public Patient GetPatient(int userId)
+        //public Patient GetPatientByUserId(int userId)
+        //{
+        //    const string query = "SELECT user_id FROM Patients WHERE user_id = @UserId";
+
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+        //        {
+        //            connection.Open();
+        //            using (SqlCommand command = new SqlCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@UserId", userId);
+
+        //                using (SqlDataReader reader = command.ExecuteReader())
+        //                {
+        //                    if (reader.Read()) // Check if data is available before accessing it
+        //                    {
+        //                        return new Patient(
+        //                            reader.GetInt32(reader.GetOrdinal("user_id"))
+        //                        );
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        throw new Exception("Patient not found");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception("Error retrieving patient", e);
+        //    }
+        //}
+
+
+        public Patient GetPatient(int id)
         {
-            const string query = "SELECT user_id FROM Patients WHERE user_id = @UserId";
+            const string query = "SELECT * FROM Patients WHERE id = @id";
 
             try
             {
@@ -42,14 +76,14 @@ namespace Team3.Models
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@id", id);
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read()) // Check if data is available before accessing it
                             {
                                 return new Patient(
-                                    reader.GetInt32(reader.GetOrdinal("user_id"))
+                                    (int)reader[0], (int)reader[1]
                                 );
                             }
                         }

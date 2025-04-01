@@ -39,11 +39,9 @@ namespace Team3.Views
             if (e.ClickedItem is User selectedUser)
             {
                 Debug.WriteLine($"Selected User: ID={selectedUser.Id}, Name={selectedUser.Name}, Role={selectedUser.Role}");
-                var optionsPage = new OptionsPage();
-                optionsPage.SelectedUser = selectedUser;
-
+                //var optionsPage = new OptionsPage();
                 // Navigate to the options page
-                Frame.Navigate(typeof(OptionsPage), selectedUser);
+                Frame.Navigate(typeof(OptionsPage), selectedUser.Id);
 
             }
         }
