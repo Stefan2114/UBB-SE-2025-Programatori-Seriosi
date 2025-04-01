@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace Team3.Entities
 {
-
-
     public class Doctor
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public int DepartmentId { get; set; }
 
-        public Doctor(int id, int userId)
+        public Doctor(int id, int userId, int departmentId)
         {
-            this.Id = id;
-            this.UserId = userId;
+            Id = id;
+            UserId = userId;
+            DepartmentId = departmentId;
         }
     }
-
 }

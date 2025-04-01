@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Team3.Entities;
 
@@ -57,6 +58,49 @@ namespace Team3.Models
             catch (Exception e)
             {
                 throw new Exception("Error adding appointment", e);
+            }
+        }
+
+        public List<Appointment> GetDoctorAppointments(int doctorId, DateTime startDate, DateTime endDate)
+        {
+            const string query = @"SELECT id, doctor_id, patient_id, appointment_datetime, location 
+                                FROM appointments 
+                                WHERE doctor_id = @doctor_id 
+                                AND appointment_datetime BETWEEN @start_date AND @end_date";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@doctor_id", doctorId);
+                        command.Parameters.AddWithValue("@start_date", startDate);
+                        command.Parameters.AddWithValue("@end_date", endDate);
+
+                        List<Appointment> appointments = new List<Appointment>();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                appointments.Add(new Appointment(
+                                    (int)reader["id"],
+                                    (int)reader["doctor_id"],
+                                    (int)reader["patient_id"],
+                                    (DateTime)reader["appointment_datetime"],
+                                    reader["location"].ToString() ?? ""
+                                ));
+                            }
+                        }
+                        return appointments;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error getting doctor appointments", e);
             }
         }
 

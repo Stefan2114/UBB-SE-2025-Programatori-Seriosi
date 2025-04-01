@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -23,41 +24,83 @@
                 VerticalAlignment="Top"
                 Margin="0,0,0,10"/>
 
-        <!-- Time Period Selection -->
-        <ComboBox x:Name="TimePeriodComboBox"
-                  Grid.Row="1"
-                  Width="200"
-                  SelectionChanged="TimePeriodComboBox_SelectionChanged">
-            <ComboBoxItem Content="Last Week"/>
-            <ComboBoxItem Content="Last Month"/>
-            <ComboBoxItem Content="Last 6 Months"/>
-            <ComboBoxItem Content="Last Year"/>
-        </ComboBox>
+        <!-- Title -->
+        <TextBlock Text="Doctor Statistics"
+                   Grid.Row="1"
+                   Style="{ThemeResource TitleLargeTextBlockStyle}"
+                   Margin="0,0,0,20"/>
 
-        <!-- Doctor Schedules List -->
-        <ListView Grid.Row="2"
-                  x:Name="DoctorScheduleList"
-                  Margin="0,10,0,0"
-                  Height="400"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Padding="10">
-                        <TextBlock Text="{Binding DoctorName}" 
-                                   FontSize="16"
-                                   Width="150"
-                                   TextTrimming="CharacterEllipsis"/>
-                        <TextBlock Text="{Binding TotalHoursWorked}" 
-                                   FontSize="16"
-                                   Width="100"
-                                   TextAlignment="Center"/>
-                        <TextBlock Text="{Binding PatientsTreated}" 
-                                   FontSize="16"
-                                   Width="100"
-                                   TextAlignment="Center"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <!-- Time Period Selection -->
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    Spacing="10" 
+                    Margin="0,0,0,20">
+            <TextBlock Text="Select Time Period:"
+                       VerticalAlignment="Center"/>
+            <ComboBox x:Name="TimePeriodComboBox"
+                      Width="200"
+                      SelectionChanged="TimePeriodComboBox_SelectionChanged">
+                <ComboBoxItem Content="Last Week"/>
+                <ComboBoxItem Content="Last Month"/>
+                <ComboBoxItem Content="Last 6 Months"/>
+                <ComboBoxItem Content="Last Year"/>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Headers and List Container -->
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Headers -->
+            <Grid Grid.Row="0" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Doctor Name" 
+                           Grid.Column="0"
+                           Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                <TextBlock Text="Hours Worked" 
+                           Grid.Column="1"
+                           Style="{ThemeResource SubtitleTextBlockStyle}"
+                           TextAlignment="Center"/>
+                <TextBlock Text="Patients Treated" 
+                           Grid.Column="2"
+                           Style="{ThemeResource SubtitleTextBlockStyle}"
+                           TextAlignment="Center"/>
+            </Grid>
+
+            <!-- Doctor List -->
+            <ListView x:Name="DoctorListView"
+                      Grid.Row="1"
+                      Margin="0,10,0,0"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}" 
+                                       Grid.Column="0"
+                                       TextTrimming="CharacterEllipsis"
+                                       MaxWidth="180"/>
+                            <TextBlock Text="{Binding TotalHoursWorked}" 
+                                       Grid.Column="1"
+                                       TextAlignment="Center"/>
+                            <TextBlock Text="{Binding PatientsTreated}" 
+                                       Grid.Column="2"
+                                       TextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
     </Grid>
 </Page>
