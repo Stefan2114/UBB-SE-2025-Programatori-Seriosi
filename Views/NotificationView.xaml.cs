@@ -48,25 +48,25 @@ namespace Team3.Views
 
         private void AddAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-            ModelView.AddAppointment(UserId);
+            ModelView.AddAppointment();
         }
 
 
         private void DeleteAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-            ModelView.DeleteAppointment(UserId);
+            ModelView.DeleteAppointment();
         }
 
 
         private void AddTreatmentButton_Click(object sender, RoutedEventArgs e)
         {
-            ModelView.AddTreatment(UserId);
+            ModelView.AddTreatment();
         }
 
 
         private void AddReviewButton_Click(object sender, RoutedEventArgs e)
         {
-            ModelView.AddReview(UserId);
+            ModelView.AddReview();
         }
 
 
