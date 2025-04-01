@@ -27,6 +27,8 @@ namespace Team3.Views
     {
         public MessageModelView ViewModel { get; } = new MessageModelView();
         public int UserId { get; set; }
+        public int ChatId { get; set; }
+
 
 
         public MessageView()
@@ -38,17 +40,18 @@ namespace Team3.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is int userId)
+            if (e.Parameter is (int userId, int chatId))
             {
                 UserId = userId;
-                ViewModel.loadMessages(userId);
+                ChatId = chatId;
+                ViewModel.LoadMessages(userId);
                 // In a real app, you might filter notifications by user
                 Debug.WriteLine($"Loading notifications for user: ID={userId}");
             }
         }
 
         private
-            void BackClicked(object sender, RoutedEventArgs e)
+        void BackClicked(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(ChatView));
         }
@@ -56,7 +59,7 @@ namespace Team3.Views
         private void sendButtonClicked(object sender, RoutedEventArgs e)
         {
             string message = messageBar.Text;
-            ViewModel.sendButtonHandler(message);
+            ViewModel.SendButtonHandler(UserId, ChatId, message);
             messageBar.PlaceholderText = "Type a message...";
         }
 
