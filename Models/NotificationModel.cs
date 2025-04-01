@@ -138,7 +138,7 @@ namespace Team3.Models
 
         public int AddNotification(Notification notification)
         {
-            const string query = "INSERT INTO notifications (user_id, delivery_datetime, message) VALUES (@user_id, @delivery_datetime, @message);";
+            const string query = "INSERT INTO notifications (user_id, delivery_datetime, message) VALUES (@user_id, @delivery_datetime, @message); SELECT SCOPE_IDENTITY();";
 
             try
             {

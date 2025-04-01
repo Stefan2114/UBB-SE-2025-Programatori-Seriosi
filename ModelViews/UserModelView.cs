@@ -49,9 +49,9 @@ namespace Team3.ModelViews
         }
 
 
-        public string getUserNameById(int id)
+        public User GetUser(int id)
         {
-            return _userModel.GetUser(id).Name;
+            return _userModel.GetUser(id);
         }
     }
 

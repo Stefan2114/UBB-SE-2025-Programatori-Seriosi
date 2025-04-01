@@ -1,14 +1,22 @@
-CREATE TABLE IF NOT EXISTS Appointments (
+
+drop table appointments
+
+CREATE TABLE  appointments (
     id INT PRIMARY KEY,
-    doctorId INT,
-    patientId INT,
-    appointmentDate DATETIME,
+    doctor_id INT foreign key references doctors(id),
+    patient_id INT foreign key references patients(id),
+    appointment_datetime DATETIME,
     location VARCHAR(255),
-    FOREIGN KEY (doctorId) REFERENCES Doctors(user_id),
-    FOREIGN KEY (patientId) REFERENCES Patients(user_id)
 );
 
 -- Insert Appointments
-INSERT INTO Appointments (id, doctorId, patientId, appointmentDate, location) VALUES
-(1, 3, 5, '2025-04-01 10:00:00', 'Room 101'),
-(2, 4, 6, '2025-04-02 11:30:00', 'Room 202'),
+INSERT INTO appointments  VALUES
+(1, 1, 1, '2025-04-01 10:00:00', 'Room 101'),
+(2, 2, 2, '2025-04-06 11:30:00', 'Room 202'),
+(3, 1, 2, '2025-04-05 11:30:00', 'Room 202')
+
+
+select * from appointments
+
+delete appointments
+where id = 4

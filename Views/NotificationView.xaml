@@ -68,13 +68,6 @@
                     HorizontalAlignment="Stretch"
                     Margin="0,0,5,0"/>
 
-            <Button x:Name="DeleteAppointmentButton" 
-                    Content="Delete Appointment" 
-                    Click="DeleteAppointmentButton_Click"
-                    Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    Margin="5,0,5,0"/>
-
             <Button x:Name="AddTreatmentButton" 
                     Content="Add Treatment" 
                     Click="AddTreatmentButton_Click"
@@ -88,6 +81,13 @@
                     Grid.Column="3"
                     HorizontalAlignment="Stretch"
                     Margin="5,0,0,0"/>
+
+            <Button x:Name="DeleteAppointmentButton" 
+                    Content="Delete Appointment" 
+                    Click="DeleteAppointmentButton_Click"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    Margin="5,0,5,0"/>
         </Grid>
     </Grid>
 </Page>
