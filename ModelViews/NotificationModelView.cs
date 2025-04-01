@@ -26,6 +26,11 @@ namespace Team3.ModelViews
         private readonly static string MEDICATION_REMINDER_NOTIFICATION_TEMPLATE = "It's time to take @drug, Quantity: @quantity, @administration";
         private readonly static string REVIEW_REMINDER_NOTIFICATION_TEMPLATE = "Reminder: Please leave a review for your last appointment.";
 
+        private readonly static int HARDCODED_DOCTOR_ID = 1;
+        private readonly static int HARDCODED_PATIENT_ID = 1;
+        private readonly static int HARDCODED_APPOINTMENT_ID = 4;
+
+
 
 
         private string GetUpcomingAppointmentNotificationMessage(string datetime, string doctorName, string location)
@@ -118,10 +123,10 @@ namespace Team3.ModelViews
         {
             DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
 
-            Appointment appointment = new Appointment(4, 1, 1, currentDateTime.AddDays(1), "FSEGA");
+            Appointment appointment = new Appointment(HARDCODED_APPOINTMENT_ID, HARDCODED_DOCTOR_ID, HARDCODED_PATIENT_ID, currentDateTime.AddDays(1), "FSEGA");
 
             _appointmentModel.AddAppointment(appointment);
-            AddUpcomingAppointmentNotification(4);
+            AddUpcomingAppointmentNotification(HARDCODED_APPOINTMENT_ID);
 
         }
 
@@ -155,14 +160,44 @@ namespace Team3.ModelViews
 
         public void AddCancelAppointmentNotification(int appointmentId)
         {
+            Appointment appointment = _appointmentModel.GetAppointment(appointmentId);
+            Debug.WriteLine(appointment.ToString());
+            Doctor doctor = _doctorModel.GetDoctor(appointment.DoctorId);
+
+            Patient patient = _patientModel.GetPatient(appointment.PatientId);
+            User user = _userModelView.GetUser(patient.UserId);
+
+
+            Debug.WriteLine(appointment.ToString());
+            Debug.WriteLine(doctor.ToString());
+            Debug.WriteLine(user.ToString());
+
+
+            DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
+
+            string appointmentCalcelNotificationMessage = GetAppointmentCancelNotificationMessage(user.Name, appointment.AppointmentDateTime.ToString(), appointment.Location);
+            int notificationId = _notificationModel.AddNotification(new Notification(doctor.UserId, currentDateTime, appointmentCalcelNotificationMessage));
+
+
+        }
+
+
+
+        public void DeleteUpcomingAppointmentNotification(int appointmentId)
+        {
+            Appointment appointment = _appointmentModel.GetAppointment(appointmentId);
+
             AppointmentNotification appointmentNotification = _notificationModel.GetNotificationAppointmentByAppointmentId(appointmentId);
+            _notificationModel.deleteNotification(appointmentNotification.NotificationId);
         }
 
         //private void deleteUpcomingAppointmentNotification(int appo)
 
         public void DeleteAppointment(int userId)
         {
-            //DeleteAppointmentNotification
+            AddCancelAppointmentNotification(HARDCODED_APPOINTMENT_ID);
+            DeleteUpcomingAppointmentNotification(HARDCODED_APPOINTMENT_ID);
+
         }
 
         public void AddTreatment(int userId)

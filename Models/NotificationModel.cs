@@ -107,7 +107,7 @@ namespace Team3.Models
 
         public AppointmentNotification GetNotificationAppointmentByAppointmentId(int appointmentId)
         {
-            const string query = "SELECT (*) FROM appointment_notifications WHERE appointment_id = @appointment_id";
+            const string query = "SELECT * FROM appointment_notifications WHERE appointment_id = @appointment_id";
 
             try
             {
@@ -116,7 +116,7 @@ namespace Team3.Models
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@id", appointmentId);
+                        command.Parameters.AddWithValue("@appointment_id", appointmentId);
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
@@ -132,7 +132,7 @@ namespace Team3.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Error retrieving doctor", e);
+                throw new Exception("Error retrieving notification appointment", e);
             }
         }
 
