@@ -29,9 +29,9 @@ namespace Team3.ModelViews
             Debug.WriteLine(chats.Count + "chats loaded in VM");
             foreach (Chat chat in chats)
             {
-                User user1 = UserModelView.GetUser(chat.user1);
-                User user2 = UserModelView.GetUser(chat.user2);
-                Chats.Add(new ChatDTO(chat.ChatID, chat.user1, chat.user2, user1.Name, user2.Name);
+                User user1 = UserMV.GetUser(chat.user1);
+                User user2 = UserMV.GetUser(chat.user2);
+                Chats.Add(new ChatDTO(chat.ChatID, chat.user1, chat.user2, user1.Name, user2.Name));
             }
 
         }
@@ -45,17 +45,6 @@ namespace Team3.ModelViews
                 chatDict.Add(chat, chat.ChatID.ToString());
             }
             return chatDict;
-        }
-
-        public void AddChat(Chat chat)
-        {
-            ChatModel.Instance.addChat(chat.user1, chat.user2);
-            Chats.Add(chat);
-        }
-
-        public void setUserId(int id)
-        {
-            userID = id;
         }
 
         public List<Chat> GetChatsByName(string name)

@@ -19,11 +19,8 @@ namespace Team3.Views
         public event PropertyChangedEventHandler PropertyChanged;
         private ChatViewModel ViewModel { get; set; }
 
-<<<<<<< HEAD
         public User SelectedUser { get; set; }
 
-=======
->>>>>>> 24784f9 (aaaaa)
         private ObservableCollection<Chat> _filteredChats = new ObservableCollection<Chat>();
         public ObservableCollection<Chat> FilteredChats
         {
@@ -39,7 +36,6 @@ namespace Team3.Views
         {
             this.InitializeComponent();
             ViewModel = new ChatViewModel();
-<<<<<<< HEAD
             this.DataContext = ViewModel;
         }
 
@@ -52,21 +48,12 @@ namespace Team3.Views
                 SelectedUser = user;
                 LoadChats();
             }
-=======
-            this.DataContext = this;
-            LoadChats();
->>>>>>> 24784f9 (aaaaa)
         }
 
         private void LoadChats()
         {
-<<<<<<< HEAD
             ViewModel.LoadChats(SelectedUser);
             //FilterChats(SelectedUser.Id.ToString());
-=======
-            ViewModel.LoadChats();
-            FilterChats("");
->>>>>>> 24784f9 (aaaaa)
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -87,7 +74,6 @@ namespace Team3.Views
             {
                 Frame.GoBack();
             }
-<<<<<<< HEAD
         }
 
         private void ChatsListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -97,10 +83,8 @@ namespace Team3.Views
                 Debug.WriteLine($"Selected Chat: ID={selectedChat.ChatID}, User1={selectedChat.user1}, User2={selectedChat.user2}");
                 var messagePage = new MessageView();
                 //messagePage.SelectedChat = selectedChat;
-                Frame.Navigate(typeof(MessageView), selectedChat);
+                Frame.Navigate(typeof(MessageView), selectedChat.ChatID);
             }
-=======
->>>>>>> 24784f9 (aaaaa)
         }
     }
 }
