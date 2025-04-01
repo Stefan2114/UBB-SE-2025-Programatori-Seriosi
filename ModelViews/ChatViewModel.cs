@@ -3,47 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Team3.Entities;
+using Team3.Models;
 
 namespace Team3.ModelViews
 {
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Linq;
-    using Team3.Entities;
-    using Team3.Models;
     internal class ChatViewModel
     {
         public int userID { get; set; }
         public ObservableCollection<Chat> Chats { get; private set; }
+        private readonly UserModelView UserMV;
 
         public ChatViewModel()
         {
             Chats = new ObservableCollection<Chat>();
-            LoadChats();
+            UserMV = new UserModelView();
         }
 
-        public void LoadChats()
+        public void LoadChats(User selectedUser)
         {
-            try
+            List<Chat> chats = ChatModel.Instance.getChats(selectedUser.Id);
+            Debug.WriteLine(chats.Count + "chats loaded in VM");
+            foreach (Chat chat in chats)
             {
-                var chatList = ChatModel.Instance.getChats(userID);
-                if (chatList != null && chatList.Any())
-                {
-                    foreach (var chat in chatList)
-                    {
-                        Debug.WriteLine(chat.ToString());
-                        Chats.Add(chat);
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("No chats returned.");
-                }
+                Chats.Add(chat);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+
         }
 
         public Dictionary<Chat, string> GetChats(int id)

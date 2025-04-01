@@ -54,7 +54,7 @@ namespace Team3.Views
         private void ChatButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to ChatPage and pass the selected user
-            //Frame.Navigate(typeof(ChatView), SelectedUser);
+            Frame.Navigate(typeof(ChatView), SelectedUser);
         }
 
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)
