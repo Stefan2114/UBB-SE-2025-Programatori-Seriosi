@@ -9,7 +9,33 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <StackPanel Padding="10">
+        <!-- Top Bar with Back Button and Search -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <Button Content="← Back" Click="BackButton_Click" Width="75"/>
+            <TextBox x:Name="SearchBox" PlaceholderText="Search chats..." Width="250" Margin="10,0,0,0"/>
+            <Button Content="Search" Click="SearchButton_Click" Margin="5,0,0,0"/>
+        </StackPanel>
 
-    </Grid>
+        <!-- Chat List -->
+<<<<<<< HEAD
+        <ListView ItemsSource="{Binding Chats, Mode=OneWay}"
+          ItemClick="ChatsListView_ItemClick"
+          IsItemClickEnabled="True"
+          Margin="0,10,0,0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Padding="10">
+                        <TextBlock Text="{Binding userName2}" FontSize="18"/>
+                    </StackPanel>
+=======
+        <ListView ItemsSource="{x:Bind FilteredChats, Mode=OneWay}" Margin="0,10,0,0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="18" Padding="10"/>
+>>>>>>> 24784f9 (aaaaa)
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackPanel>
 </Page>

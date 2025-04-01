@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,32 +37,34 @@ namespace Team3.Models
             }
         }
 
-        public List<Chat> getChats(int user)
+        public List<Chat> getChats(int userId)
         {
-            const string query = "SELECT * FROM chats WHERE user1 = @user OR user2 = @user";
+            const string query = "SELECT * FROM Chats WHERE user1 = @userId OR user2 = @userId";
 
             try
             {
-                SqlConnection connection = new SqlConnection(Config.CONNECTION);
-
-                connection.Open();
-
-                SqlCommand command = new SqlCommand(query, connection);
-                List<Chat> chats = new List<Chat>();
-
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlConnection connection = new SqlConnection(Config.CONNECTION))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        chats.Add(new Chat((int)reader[0], (int)reader[1], (int)reader[2]));
+                        command.Parameters.AddWithValue("@userId", userId);
+
+                        List<Chat> chats = new List<Chat>();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                chats.Add(new Chat((int)reader["ChatID"], (int)reader["user1"], (int)reader["user2"]));
+                            }
+                        }
+                        Debug.WriteLine(chats.Count + " chats loaded");
+                        return chats;
                     }
                 }
-
-                connection.Close();
-
-                return chats;
             }
-
             catch (Exception e)
             {
                 throw new Exception("Error getting chats", e);

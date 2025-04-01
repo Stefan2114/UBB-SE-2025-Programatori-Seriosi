@@ -32,14 +32,14 @@
                             Background="#FFEEEEEE" BorderThickness="1" 
                             BorderBrush="#FFDDDDDD">
                         <StackPanel>
-                            <TextBlock Text="{Binding content}" 
+                            <TextBlock Text="{Binding Content}" 
                                        TextWrapping="Wrap"
                                        FontSize="14" Foreground="#000000"/>
                             <StackPanel Orientation="Horizontal" 
                                         HorizontalAlignment="Right">
                                 <TextBlock Text="User: " 
                                            FontSize="10" Foreground="Gray"/>
-                                <TextBlock Text="{Binding user_id}" 
+                                <TextBlock Text="{Binding Name}" 
                                            FontSize="10" Foreground="Gray"/>
                             </StackPanel>
                         </StackPanel>

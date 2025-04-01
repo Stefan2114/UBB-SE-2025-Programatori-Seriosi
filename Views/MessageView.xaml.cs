@@ -53,7 +53,7 @@ namespace Team3.Views
         private
         void BackClicked(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(ChatView));
+            Frame.Navigate(typeof(ChatView), (UserId, ChatId));
         }
 
         private void sendButtonClicked(object sender, RoutedEventArgs e)
