@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Team3.ModelViews
         {
             Debug.WriteLine("MessageModelView created");
             messageModel = MessageModel.Instance;
-            userModelView = new UserModelView(); 
+            userModelView = new UserModelView();
             Messages = new ObservableCollection<MessageChatDTO>();
         }
 
@@ -35,7 +36,7 @@ namespace Team3.ModelViews
             List<Message> messages = messageModel.GetMessagesByChatId(chatId);
             Debug.WriteLine(messages.Count + "Messages loaded");
             Messages.Clear();
-            messages.Sort((x,y) =>  x.sentDateTime.CompareTo(y.sentDateTime));
+            messages.Sort((x, y) => x.sentDateTime.CompareTo(y.sentDateTime));
             foreach (Message message in messages)
             {
                 User user = userModelView.GetUser(message.UserId);
@@ -46,7 +47,7 @@ namespace Team3.ModelViews
 
 
 
-        public void SendButtonHandler(int userId,int chatId, string msg)
+        public void SendButtonHandler(int userId, int chatId, string msg)
         {
             Debug.WriteLine("Send button clicked");
             DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
