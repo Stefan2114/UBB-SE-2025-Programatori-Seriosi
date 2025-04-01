@@ -15,6 +15,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="ModelViews\NotificationOptionsView.xaml" />
+	  <None Remove="Views\MessageView.xaml" />
 	  <None Remove="Views\NotificationDetailView.xaml" />
 	  <None Remove="Views\NotificationView.xaml" />
 	  <None Remove="Views\OptionsPage.xaml" />
@@ -42,6 +43,11 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Models\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Views\MessageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="ModelViews\NotificationOptionsView.xaml">
