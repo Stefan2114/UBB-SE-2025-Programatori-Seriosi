@@ -23,6 +23,8 @@ namespace Team3.ModelViews
         private readonly TreatmentModelView _treatmentModelView;
         private readonly TreatmentDrugModelView treatmentDrugModelView;
         private readonly DrugModelView drugModelView;
+        private readonly ReviewModelView reviewModelView;
+
 
 
         private readonly static string UPCOMING_APPOINTMENT_NOTIFICATION_TEMPLATE = "Tomorrow @datetime, you have an appointment with Dr. @doctor at location @location";
@@ -36,6 +38,9 @@ namespace Team3.ModelViews
         private readonly static int HARDCODED_APPOINTMENT_ID = 4;
 
         private readonly static int HARDCODED_MEDICALRECORD_ID = 1;
+
+        private readonly static int HARDCODED_REVIEW_ID = 1;
+
 
 
 
@@ -106,6 +111,7 @@ namespace Team3.ModelViews
             _treatmentModelView = new TreatmentModelView();
             treatmentDrugModelView = new TreatmentDrugModelView();
             drugModelView = new DrugModelView();
+            reviewModelView = new ReviewModelView();
 
         }
 
@@ -132,7 +138,7 @@ namespace Team3.ModelViews
             _notificationModel.deleteNotification(userId);
         }
 
-        public void AddAppointment(int userId)
+        public void AddAppointment()
         {
             DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
 
@@ -249,21 +255,46 @@ namespace Team3.ModelViews
 
         //private void deleteUpcomingAppointmentNotification(int appo)
 
-        public void DeleteAppointment(int userId)
+        public void DeleteAppointment()
         {
             AddCancelAppointmentNotification(HARDCODED_APPOINTMENT_ID);
             DeleteUpcomingAppointmentNotification(HARDCODED_APPOINTMENT_ID);
 
         }
 
-        public void AddTreatment(int userId)
+        public void AddTreatment()
         {
             AddMedicationReminderNotifications(HARDCODED_MEDICALRECORD_ID);
         }
 
-        public void AddReview(int userId)
+
+        public void AddReviewResultsNotification(int reviewId)
         {
-            //_notificationModel.deleteNotification(notificationId);
+            Review review = this.reviewModelView.getReview(reviewId);
+            MedicalRecord medicalRecord = this._medicalRecordModelView.GetMedicalRecord(review.MedicalRecordId);
+            Doctor doctor = this._doctorModelView.GetDoctor(medicalRecord.DoctorId);
+            User user = this._userModelView.GetUser(doctor.UserId);
+
+            List<User> users = this._userModelView.GetUsers();
+
+            Debug.WriteLine("Am reusit sa ajung aici");
+            DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
+
+            string notificationMessage = GetReviewNotificationMessage(user.Name, review.Message, review.NrStars);
+            foreach(User searchedUser in users)
+            {
+                if (searchedUser.Role.Equals("admin"))
+                {
+                    Notification notification = new Notification(searchedUser.Id, currentDateTime, notificationMessage);
+                    Debug.WriteLine(notification.ToString());
+                    this._notificationModel.AddNotification(notification);
+                }
+            }
+        }
+
+        public void AddReview()
+        {
+            AddReviewResultsNotification(HARDCODED_REVIEW_ID);
         }
     }
 }
