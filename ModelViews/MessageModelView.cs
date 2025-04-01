@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
@@ -10,80 +11,50 @@ using System.Threading.Tasks;
 using Team3.Entities;
 using Team3.Models;
 using Windows.Services.Maps;
+using Team3.DTOs;
 
 namespace Team3.ModelViews
 {
     public class MessageModelView
     {
         private readonly MessageModel messageModel;
-        private int chatId;
-        private int userId;
-        public ObservableCollection<String> Messages { get; set; }
+        private readonly UserModelView userModelView;
+
+        public ObservableCollection<MessageChatDTO> Messages { get; set; }
 
         public MessageModelView()
         {
             Debug.WriteLine("MessageModelView created");
             messageModel = MessageModel.Instance;
-            Messages = new ObservableCollection<String>();
+            userModelView = new UserModelView();
+            Messages = new ObservableCollection<MessageChatDTO>();
         }
 
-        //public Dictionary<string, Message> getMessagesByChatId(int chatId)
-        //{
-        //    List<Message> messages = messageModel.GetMessagesByChatId(chatId);
-        //    Debug.WriteLine(messages.Count + "Messages loaded");
-        //    Dictionary<Message, string> messagesDict = new Dictionary<string, Message>();
-        //    foreach (Message message in messages)
-        //    {
-        //        messagesDict.Add(message.id.ToString(), message);
-        //        Debug.WriteLine("Message loaded: " + message.content);
-        //    }
-        //    return messagesDict;
-        //}
 
-
-        public void setUserIdAndChat(int userId, int chatId)
+        public void LoadMessages(int chatId)
         {
-            userId = userId;
-            chatId = chatId;
-        }
+            List<Message> messages = messageModel.GetMessagesByChatId(chatId);
+            Debug.WriteLine(messages.Count + "Messages loaded");
+            Messages.Clear();
+            messages.Sort((x, y) => x.sentDateTime.CompareTo(y.sentDateTime));
+            foreach (Message message in messages)
+            {
+                User user = userModelView.GetUser(message.UserId);
+                Messages.Add(new MessageChatDTO(message.Id, message.Content, message.UserId, message.ChatId, message.sentDateTime, user.Name));
+            }
 
-        public void loadMessages()
-        {
-            //Debug.WriteLine("Loading messages");
-            //try
-            //{
-            //    List<Message> messages = messageModel.GetMessagesByChatId(chatId);
-
-            //    foreach (Message message in messages)
-            //    {
-            //        messagesDict.Add(message.id.ToString(), message);
-            //        Debug.WriteLine("Message loaded: " + message.content);
-            //    }
-            //    Debug.WriteLine(messages.Count);
-            //    foreach (KeyValuePair<string, Message> message in messages)
-            //    {
-            //        Messages.Add(message.Value);
-            //        Debug.WriteLine("Message loaded: " + message.Value.content);
-            //    }
-            //    Debug.WriteLine(Messages.Count + " messages loaded");
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new Exception("Error while loading messages: " + e.Message);
-            //}
         }
 
 
-        public void BackButtonHandler()
-        {
-            Debug.WriteLine("Back button clicked");
-        }
 
-        public void sendButtonHandler()
+        public void SendButtonHandler(int userId, int chatId, string msg)
         {
             Debug.WriteLine("Send button clicked");
-            string message = ""; // get it from a text field
-            //Messages.Add(new Message(messageID, message, _userId, chat_id));
+            DateTime currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Config.ROMANIA_TIMEZONE);
+ 
+            messageModel.addMessage(new Message(msg, userId, chatId, currentDateTime));
+
+            LoadMessages(chatId);
         }
     }
 }

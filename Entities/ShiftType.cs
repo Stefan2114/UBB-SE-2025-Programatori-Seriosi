@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Team3.Entities
 {
-   public class ShiftType
+    public class ShiftType
     {
         public int ShiftTypeId { get; set; }
         public TimeOnly ShiftTypeStartTime { get; set; }
@@ -21,5 +21,5 @@ namespace Team3.Entities
 
     }
 
-   
+
 }

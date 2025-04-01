@@ -12,9 +12,9 @@ namespace Team3.Entities
         public int user1 { get; set; }
         public int user2 { get; set; }
 
-        public Chat(int ChatID, int u1, int u2)
+        public Chat(int chatID, int u1, int u2)
         {
-            ChatID = ChatID;
+            ChatID = chatID;
             user1 = u1;
             user2 = u2;
         }
